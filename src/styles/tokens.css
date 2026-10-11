@@ -1,0 +1,140 @@
+/* BRAND HOUSE ERP - Design Tokens
+   All color tokens are strictly defined here as CSS custom properties.
+   Never hardcode hex values in components!
+*/
+
+:root {
+  /* Brand grayscale foundation (Black & White premium minimalism) */
+  --bh-black: #0a0a0a;
+  --bh-white: #ffffff;
+  --bh-gray-50: #f9fafb;
+  --bh-gray-100: #f3f4f6;
+  --bh-gray-200: #e5e7eb;
+  --bh-gray-300: #d1d5db;
+  --bh-gray-400: #9ca3af;
+  --bh-gray-500: #6b7280;
+  --bh-gray-600: #4b5563;
+  --bh-gray-700: #374151;
+  --bh-gray-800: #1f2937;
+  --bh-gray-900: #111827;
+
+  /* PLACEHOLDER: brand accent color from brendhouse.az
+     Until the exact HEX is provided, neutral #111111 is used as default.
+     (Note: brendhouse.az SVG icon asset uses #a47a68; this can be swapped here anytime).
+  */
+  --bh-accent: #111111;
+  --bh-accent-hover: #262626;
+  --bh-accent-foreground: #ffffff;
+
+  /* Semantic feedback tokens */
+  --success: #15803d;
+  --success-foreground: #ffffff;
+  --success-bg: #f0fdf4;
+  --warning: #b45309;
+  --warning-foreground: #ffffff;
+  --warning-bg: #fffbeb;
+  --danger: #b91c1c;
+  --danger-foreground: #ffffff;
+  --danger-bg: #fef2f2;
+  --info: #0369a1;
+  --info-foreground: #ffffff;
+  --info-bg: #f0f9ff;
+
+  /* Data Visualization / Chart Tokens */
+  --chart-1: #111111;
+  --chart-2: #52525b;
+  --chart-3: #a1a1aa;
+  --chart-4: #2563eb;
+  --chart-5: #16a34a;
+  --chart-6: #d97706;
+  --chart-7: #dc2626;
+
+  /* Surfaces & Structural */
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #18181b;
+
+  /* Radii scale (4px / 6px / 8px / 12px) */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+
+  /* Elevation / Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px -1px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+  /* Dark theme overrides - high-contrast premium luxury dark palette */
+  --bh-black: #000000;
+  --bh-white: #ffffff;
+  --bh-gray-50: #121214;
+  --bh-gray-100: #18181b;
+  --bh-gray-200: #27272a;
+  --bh-gray-300: #3f3f46;
+  --bh-gray-400: #71717a;
+  --bh-gray-500: #a1a1aa;
+  --bh-gray-600: #d4d4d8;
+  --bh-gray-700: #e4e4e7;
+  --bh-gray-800: #f4f4f5;
+  --bh-gray-900: #fafafa;
+
+  /* Accent in dark mode */
+  --bh-accent: #f4f4f5;
+  --bh-accent-hover: #e4e4e7;
+  --bh-accent-foreground: #09090b;
+
+  /* Semantic dark */
+  --success: #22c55e;
+  --success-foreground: #052e16;
+  --success-bg: #052e16;
+  --warning: #f59e0b;
+  --warning-foreground: #451a03;
+  --warning-bg: #451a03;
+  --danger: #ef4444;
+  --danger-foreground: #450a0a;
+  --danger-bg: #450a0a;
+  --info: #38bdf8;
+  --info-foreground: #082f49;
+  --info-bg: #082f49;
+
+  /* Data Visualization / Chart Tokens (Dark Mode) */
+  --chart-1: #fafafa;
+  --chart-2: #a1a1aa;
+  --chart-3: #71717a;
+  --chart-4: #38bdf8;
+  --chart-5: #22c55e;
+  --chart-6: #fbbf24;
+  --chart-7: #f87171;
+
+  /* Surfaces & Structural */
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #121214;
+  --card-foreground: #fafafa;
+  --popover: #121214;
+  --popover-foreground: #fafafa;
+  --muted: #1c1c20;
+  --muted-foreground: #a1a1aa;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #d4d4d8;
+
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+}
+

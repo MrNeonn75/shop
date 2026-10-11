@@ -1,0 +1,44 @@
+{
+  "title": "Məhsulların İdarə Olunması",
+  "description": "Geyim, ayaqqabı və aksesuarların kataloqu, qiymətləri və qalığı.",
+  "addProduct": "Yeni Məhsul",
+  "sections": {
+    "kisi": "Kişi",
+    "qadin": "Qadın",
+    "usaq": "Uşaq",
+    "diger": "Digər"
+  },
+  "types": {
+    "geyim": "Geyim",
+    "ayaqqabi": "Ayaqqabı",
+    "aksesuar": "Aksesuar"
+  },
+  "categories": {
+    "koynek": "Köynək",
+    "salvar": "Şalvar",
+    "kazak": "Kazak",
+    "sweatshirt": "Sweatshirt",
+    "tshirt": "Tshirt",
+    "bluz": "Bluz",
+    "don": "Don",
+    "dest": "Dəst",
+    "jilet": "Jilet",
+    "palto": "Palto",
+    "ayaqqabi": "Ayaqqabı",
+    "canta_pulqabi": "Çanta və pulqabı"
+  },
+  "fields": {
+    "name": "Məhsulun Adı",
+    "sku": "SKU / Artikul",
+    "barcode": "Barkod",
+    "section": "Bölmə",
+    "type": "Növ",
+    "category": "Kateqoriya",
+    "brand": "Brend",
+    "price": "Satış Qiyməti",
+    "costPrice": "Maya Dəyəri",
+    "stock": "Cari Qalıq",
+    "minStock": "Minimum Qalıq"
+  }
+}
+

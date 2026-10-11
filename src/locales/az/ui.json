@@ -1,0 +1,18 @@
+{
+  "showcaseTitle": "Komponent Sistemi və Dizayn Standartları",
+  "showcaseSubtitle": "BRAND HOUSE ERP üçün yüksək keyfiyyətli, minimalist və müasir interfeys elementləri.",
+  "tabs": {
+    "typography": "Tipoqrafiya & Qliflər",
+    "buttons": "Düymələr & Nişanlar",
+    "forms": "Form İdarəetmələri",
+    "feedback": "Dialoq & Bildirişlər",
+    "data": "Cədvəl & Məlumat Ekranı"
+  },
+  "validation": {
+    "required": "Bu xana mütləq doldurulmalıdır",
+    "invalidEmail": "Düzgün e-poçt ünvanı daxil edin",
+    "positiveNumber": "Müsbət rəqəm daxil edilməlidir",
+    "minAmount": "Məbləğ sıfırdan böyük olmalıdır"
+  }
+}
+

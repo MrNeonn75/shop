@@ -1,0 +1,14 @@
+{
+  "dashboard": "İdarəetmə Paneli",
+  "products": "Məhsullar",
+  "inventory": "Anbar & Stok",
+  "sales": "Satış & POS",
+  "branches": "Filiallar",
+  "customers": "Müştərilər",
+  "reports": "Hesabatlar",
+  "settings": "Tənzimləmələr",
+  "uiShowcase": "UI Komponent Vitrini",
+  "userProfile": "Profil",
+  "logout": "Çıxış"
+}
+
