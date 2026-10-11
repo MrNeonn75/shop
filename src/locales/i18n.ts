@@ -8,6 +8,7 @@ import azProducts from './az/products.json';
 import azBranches from './az/branches.json';
 import azAuth from './az/auth.json';
 import azUi from './az/ui.json';
+import azPos from './az/pos.json';
 
 // English translations (Architecture ready)
 import enCommon from './en/common.json';
@@ -25,6 +26,7 @@ export const resources = {
     branches: azBranches,
     auth: azAuth,
     ui: azUi,
+    pos: azPos,
   },
   en: {
     common: enCommon,

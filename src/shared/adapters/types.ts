@@ -66,4 +66,43 @@ export interface DashboardRepository {
   getActivities(params: import('../../features/dashboard/types').DashboardFilterParams): Promise<import('../../features/dashboard/types').DashboardActivitiesData>;
 }
 
+export interface InventoryRepository {
+  getMovements(params?: import('../../features/inventory/types').MovementFilterParams): Promise<PaginatedResult<import('../../features/inventory/types').StockMovement>>;
+  getStockBalances(params?: import('../../features/inventory/types').StockFilterParams): Promise<import('../../features/inventory/types').StockBalance[]>;
+  getVariantMatrix(productId: string, warehouseId: string): Promise<import('../../features/inventory/services/ledgerEngine').VariantMatrixData>;
+  getStockDocuments(params?: { type?: string; status?: string; warehouseId?: string }): Promise<import('../../features/inventory/types').StockDocument[]>;
+  getStockDocumentById(id: string): Promise<import('../../features/inventory/types').StockDocument | null>;
+  createStockDocument(doc: Partial<import('../../features/inventory/types').StockDocument>, idempotencyKey?: string): Promise<import('../../features/inventory/types').StockDocument>;
+  confirmStockDocument(id: string, idempotencyKey?: string): Promise<import('../../features/inventory/types').StockDocument>;
+  getCountSessions(params?: { status?: string; warehouseId?: string }): Promise<import('../../features/inventory/types').InventoryCountSession[]>;
+  getCountSessionById(id: string): Promise<import('../../features/inventory/types').InventoryCountSession | null>;
+  createCountSession(payload: Partial<import('../../features/inventory/types').InventoryCountSession>, idempotencyKey?: string): Promise<import('../../features/inventory/types').InventoryCountSession>;
+  logCountScan(sessionId: string, payload: { barcodeOrSku: string; delta: number; isUndo?: boolean; manualQty?: number }): Promise<import('../../features/inventory/types').InventoryCountSession>;
+  toggleRecountItem(sessionId: string, itemId: string): Promise<import('../../features/inventory/types').InventoryCountSession>;
+  updateCountSessionStatus(sessionId: string, status: import('../../features/inventory/types').InventoryCountStatus): Promise<import('../../features/inventory/types').InventoryCountSession>;
+  approveCountSession(sessionId: string, idempotencyKey?: string): Promise<{ session: import('../../features/inventory/types').InventoryCountSession; adjustmentDocument: import('../../features/inventory/types').StockDocument }>;
+  importOpeningBalance(warehouseId: string, rows: import('../../features/inventory/types').OpeningBalanceRow[], override: boolean, overrideReason?: string, idempotencyKey?: string): Promise<import('../../features/inventory/types').StockDocument>;
+  getOpeningBalanceRecords(): Promise<import('../../features/inventory/types').OpeningBalanceRecord[]>;
+  getAlertRules(): Promise<import('../../features/inventory/types').StockAlertRule[]>;
+  saveAlertRule(rule: Partial<import('../../features/inventory/types').StockAlertRule>): Promise<import('../../features/inventory/types').StockAlertRule>;
+  deleteAlertRule(id: string): Promise<boolean>;
+  getWarehouses(): Promise<import('./mock/adminMockData').AdminWarehouse[]>;
+  getWarehouseById(id: string): Promise<import('./mock/adminMockData').AdminWarehouse | null>;
+  getWarehouseBins(warehouseId: string): Promise<import('../../features/inventory/types').WarehouseBinZone[]>;
+}
+
+export interface TransferRepository {
+  getTransfers(params?: import('../../features/transfers/types').TransferFilterParams): Promise<import('../../features/transfers/types').Transfer[]>;
+  getTransferById(id: string): Promise<import('../../features/transfers/types').Transfer | null>;
+  createTransfer(payload: import('../../features/transfers/types').CreateTransferPayload, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+  submitTransfer(id: string, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+  approveTransfer(id: string, notes?: string, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+  rejectTransfer(id: string, reason: string, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+  startPicking(id: string, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+  updatePicking(id: string, payload: import('../../features/transfers/types').UpdatePickingPayload, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+  dispatchTransfer(id: string, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+  receiveTransfer(id: string, payload: import('../../features/transfers/types').ReceiveTransferPayload, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+  cancelTransfer(id: string, reason: string, idempotencyKey?: string): Promise<import('../../features/transfers/types').Transfer>;
+}
+
 

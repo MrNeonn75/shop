@@ -1,4 +1,5 @@
 import { Qapik, qapikToAzn } from './money';
+export { toQapik, aznToQapik, qapikToAzn, type Qapik } from './money';
 
 const TIMEZONE = 'Asia/Baku';
 const LOCALE = 'az-AZ';

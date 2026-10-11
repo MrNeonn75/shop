@@ -21,6 +21,20 @@ import { BrandsPage } from '../../features/catalog/pages/BrandsPage';
 import { ImportWizardPage } from '../../features/catalog/pages/ImportWizardPage';
 import { BarcodeLabelsPage } from '../../features/catalog/pages/BarcodeLabelsPage';
 
+// Inventory Module Pages
+import { StockOverviewPage } from '../../features/inventory/pages/StockOverviewPage';
+import { StockLedgerPage } from '../../features/inventory/pages/StockLedgerPage';
+import { StockDocumentsPage } from '../../features/inventory/pages/StockDocumentsPage';
+import { InventoryCountPage } from '../../features/inventory/pages/InventoryCountPage';
+import { OpeningBalanceImportPage } from '../../features/inventory/pages/OpeningBalanceImportPage';
+import { WarehousesPage } from '../../features/inventory/pages/WarehousesPage';
+import { StockAlertsPage } from '../../features/inventory/pages/StockAlertsPage';
+
+// Transfers Module Pages
+import { TransfersListPage } from '../../features/transfers/pages/TransfersListPage';
+import { TransferCreatePage } from '../../features/transfers/pages/TransferCreatePage';
+import { TransferDetailPage } from '../../features/transfers/pages/TransferDetailPage';
+
 // Administration Module Pages
 import { CompanyProfilePage } from '../../features/admin/pages/CompanyProfilePage';
 import { BranchesAdminPage } from '../../features/admin/pages/BranchesAdminPage';
@@ -32,6 +46,9 @@ import { TaxSettingsPage } from '../../features/admin/pages/TaxSettingsPage';
 import { IntegrationsPage } from '../../features/admin/pages/IntegrationsPage';
 import { SystemHealthPage } from '../../features/admin/pages/SystemHealthPage';
 import { AuditLogPage } from '../../features/admin/pages/AuditLogPage';
+
+// POS Module Page
+import { PosTerminalPage } from '../../features/pos/pages/PosTerminalPage';
 
 // Business Modules Placeholders
 import { ModulePlaceholderPage } from '../../features/modules/pages/ModulePlaceholderPage';
@@ -56,6 +73,16 @@ export const router = createBrowserRouter([
     element: <ResetPasswordPage />,
   },
 
+  // Dedicated Full-Screen POS Terminal Route
+  {
+    path: '/pos',
+    element: (
+      <ProtectedRoute requiredPermission="pos.terminal.access">
+        <PosTerminalPage />
+      </ProtectedRoute>
+    ),
+  },
+
   // Protected App Shell Routes
   {
     path: '/',
@@ -71,24 +98,6 @@ export const router = createBrowserRouter([
       },
 
       // Operations (Əməliyyatlar)
-      {
-        path: 'pos',
-        element: (
-          <ProtectedRoute requiredPermission="pos.terminal.access">
-            <ModulePlaceholderPage
-              moduleName="POS Kassa Terminalı"
-              category="Əməliyyatlar"
-              description="Barkod skaneri, sensorlu interfeys, fiskal çek çapı və çoxfiliallı kassa idarəetməsi."
-              requiredPermission="pos.terminal.access"
-              kpis={[
-                { label: 'Gündəlik Çek Sayı', value: '142 çek' },
-                { label: 'Kassa Dövriyyəsi', value: '5,840.00 ₼' },
-                { label: 'Aktiv Kassa', value: 'Kassa 1 (Onlayn)' },
-              ]}
-            />
-          </ProtectedRoute>
-        ),
-      },
       {
         path: 'sales',
         element: (
@@ -111,17 +120,23 @@ export const router = createBrowserRouter([
         path: 'transfers',
         element: (
           <ProtectedRoute requiredPermission="inventory.transfer.view">
-            <ModulePlaceholderPage
-              moduleName="Filiallararası Transferlər"
-              category="Əməliyyatlar"
-              description="Filiallar və anbarlar arasında malların yerdəyişməsi, təsdiqi və qəbulu."
-              requiredPermission="inventory.transfer.view"
-              kpis={[
-                { label: 'Gözləmədəki Transferlər', value: '4 sorğu' },
-                { label: 'Yolda Olan Mallar', value: '86 ədəd' },
-                { label: 'Bu Ay Çatdırılan', value: '412 ədəd' },
-              ]}
-            />
+            <TransfersListPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'transfers/new',
+        element: (
+          <ProtectedRoute requiredPermission="inventory.transfer.create">
+            <TransferCreatePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'transfers/:id',
+        element: (
+          <ProtectedRoute requiredPermission="inventory.transfer.view">
+            <TransferDetailPage />
           </ProtectedRoute>
         ),
       },
@@ -195,22 +210,55 @@ export const router = createBrowserRouter([
         path: 'inventory',
         element: (
           <ProtectedRoute requiredPermission="inventory.stock.view">
-            <ModulePlaceholderPage
-              moduleName="Anbar və Vitrin Qalıqları"
-              category="Məhsul və Anbar"
-              description="Filiallar üzrə real-vaxt stok vəziyyəti, kritik limitlər və inventarizasiya sayımı."
-              requiredPermission="inventory.stock.view"
-              kpis={[
-                { label: 'Cəmi Stok Vahidləri', value: '3,840 ədəd' },
-                { label: 'Kritik Qalıqlar', value: '18 SKU' },
-                {
-                  label: 'Ümumi Maya Dəyəri',
-                  value: '84,500.00 ₼',
-                  isSensitive: true,
-                  permission: 'products.cost_price.view',
-                },
-              ]}
-            />
+            <StockOverviewPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'inventory/ledger',
+        element: (
+          <ProtectedRoute requiredPermission="inventory.stock.view">
+            <StockLedgerPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'inventory/documents',
+        element: (
+          <ProtectedRoute requiredPermission="inventory.stock.view">
+            <StockDocumentsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'inventory/count',
+        element: (
+          <ProtectedRoute requiredPermission="inventory.stock.adjust">
+            <InventoryCountPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'inventory/opening-balance',
+        element: (
+          <ProtectedRoute requiredPermission="inventory.stock.adjust">
+            <OpeningBalanceImportPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'inventory/warehouses',
+        element: (
+          <ProtectedRoute requiredPermission="inventory.stock.view">
+            <WarehousesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'inventory/alerts',
+        element: (
+          <ProtectedRoute requiredPermission="inventory.stock.view">
+            <StockAlertsPage />
           </ProtectedRoute>
         ),
       },

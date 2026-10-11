@@ -30,6 +30,7 @@ import {
   FolderTree,
   Tag,
   Barcode,
+  FileText,
 } from 'lucide-react';
 import { useUiStore } from '../../shared/stores/uiStore';
 import { usePermission } from '../../shared/hooks/usePermission';
@@ -109,6 +110,18 @@ export const Sidebar: React.FC = () => {
           to: '/inventory',
           label: 'Anbar Qalıqları',
           icon: <Boxes className="h-4 w-4 shrink-0" />,
+          permission: 'inventory.stock.view',
+        },
+        {
+          to: '/inventory/ledger',
+          label: 'Hərəkət Jurnalı',
+          icon: <History className="h-4 w-4 shrink-0" />,
+          permission: 'inventory.stock.view',
+        },
+        {
+          to: '/inventory/documents',
+          label: 'Anbar Sənədləri',
+          icon: <FileText className="h-4 w-4 shrink-0" />,
           permission: 'inventory.stock.view',
         },
         {
