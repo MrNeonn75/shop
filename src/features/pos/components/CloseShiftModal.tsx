@@ -22,7 +22,7 @@ export const CloseShiftModal: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [zReportData, setZReportData] = useState<ZReportData | null>(null);
 
-  if (!isCloseShiftModalOpen || !activeShift) return null;
+  if (!isCloseShiftModalOpen || (!activeShift && !zReportData)) return null;
 
   // Calculate counted total from denominations
   const totalCountedQapik = AZN_DENOMINATIONS_TEMPLATE.reduce((sum, denom) => {
@@ -31,7 +31,7 @@ export const CloseShiftModal: React.FC = () => {
     return sum + count * valueInQapik;
   }, 0);
 
-  const expectedCashQapik = activeShift.expectedCashQapik;
+  const expectedCashQapik = activeShift?.expectedCashQapik ?? toQapik(0);
   const varianceQapik = totalCountedQapik - expectedCashQapik;
   const absVariance = Math.abs(varianceQapik);
   const exceedsTolerance = absVariance > 500; // > 5.00 AZN variance
@@ -45,6 +45,7 @@ export const CloseShiftModal: React.FC = () => {
   };
 
   const handleCloseShift = async () => {
+    if (!activeShift) return;
     setErrorMessage(null);
 
     if (exceedsTolerance && !varianceReason.trim()) {

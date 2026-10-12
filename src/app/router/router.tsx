@@ -1,76 +1,171 @@
+import React, { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { AppLayout } from '../../components/layout/AppLayout';
 import { ProtectedRoute } from '../../components/layout/ProtectedRoute';
+import { PageSkeleton } from '../../components/ui/PageSkeleton';
+
+const lazyPage = <T extends Record<string, unknown>>(
+  importer: () => Promise<T>,
+  exportName: keyof T
+) =>
+  lazy(async () => {
+    const mod = await importer();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return { default: mod[exportName] as unknown as React.ComponentType<any> };
+  });
 
 // Auth Pages
-import { LoginPage } from '../../features/auth/pages/LoginPage';
-import { ForgotPasswordPage } from '../../features/auth/pages/ForgotPasswordPage';
-import { ResetPasswordPage } from '../../features/auth/pages/ResetPasswordPage';
-import { ActiveSessionsPage } from '../../features/auth/pages/ActiveSessionsPage';
+const LoginPage = lazyPage(() => import('../../features/auth/pages/LoginPage'), 'LoginPage');
+const ForgotPasswordPage = lazyPage(() => import('../../features/auth/pages/ForgotPasswordPage'), 'ForgotPasswordPage');
+const ResetPasswordPage = lazyPage(() => import('../../features/auth/pages/ResetPasswordPage'), 'ResetPasswordPage');
+const ActiveSessionsPage = lazyPage(() => import('../../features/auth/pages/ActiveSessionsPage'), 'ActiveSessionsPage');
 
 // Foundation Pages
-import { DashboardPage } from '../../features/dashboard/pages/DashboardPage';
-import { BranchesPage } from '../../features/branches/pages/BranchesPage';
-import { UiShowcasePage } from '../../features/dev-ui/pages/UiShowcasePage';
+const DashboardPage = lazyPage(() => import('../../features/dashboard/pages/DashboardPage'), 'DashboardPage');
+const BranchesPage = lazyPage(() => import('../../features/branches/pages/BranchesPage'), 'BranchesPage');
+const UiShowcasePage = lazyPage(() => import('../../features/dev-ui/pages/UiShowcasePage'), 'UiShowcasePage');
 
 // Catalog Module Pages
-import { ProductListPage } from '../../features/catalog/pages/ProductListPage';
-import { ProductFormPage } from '../../features/catalog/pages/ProductFormPage';
-import { CategoriesPage } from '../../features/catalog/pages/CategoriesPage';
-import { BrandsPage } from '../../features/catalog/pages/BrandsPage';
-import { ImportWizardPage } from '../../features/catalog/pages/ImportWizardPage';
-import { BarcodeLabelsPage } from '../../features/catalog/pages/BarcodeLabelsPage';
+const ProductListPage = lazyPage(() => import('../../features/catalog/pages/ProductListPage'), 'ProductListPage');
+const ProductFormPage = lazyPage(() => import('../../features/catalog/pages/ProductFormPage'), 'ProductFormPage');
+const CategoriesPage = lazyPage(() => import('../../features/catalog/pages/CategoriesPage'), 'CategoriesPage');
+const BrandsPage = lazyPage(() => import('../../features/catalog/pages/BrandsPage'), 'BrandsPage');
+const ImportWizardPage = lazyPage(() => import('../../features/catalog/pages/ImportWizardPage'), 'ImportWizardPage');
+const BarcodeLabelsPage = lazyPage(() => import('../../features/catalog/pages/BarcodeLabelsPage'), 'BarcodeLabelsPage');
 
 // Inventory Module Pages
-import { StockOverviewPage } from '../../features/inventory/pages/StockOverviewPage';
-import { StockLedgerPage } from '../../features/inventory/pages/StockLedgerPage';
-import { StockDocumentsPage } from '../../features/inventory/pages/StockDocumentsPage';
-import { InventoryCountPage } from '../../features/inventory/pages/InventoryCountPage';
-import { OpeningBalanceImportPage } from '../../features/inventory/pages/OpeningBalanceImportPage';
-import { WarehousesPage } from '../../features/inventory/pages/WarehousesPage';
-import { StockAlertsPage } from '../../features/inventory/pages/StockAlertsPage';
+const StockOverviewPage = lazyPage(() => import('../../features/inventory/pages/StockOverviewPage'), 'StockOverviewPage');
+const StockLedgerPage = lazyPage(() => import('../../features/inventory/pages/StockLedgerPage'), 'StockLedgerPage');
+const StockDocumentsPage = lazyPage(() => import('../../features/inventory/pages/StockDocumentsPage'), 'StockDocumentsPage');
+const InventoryCountPage = lazyPage(() => import('../../features/inventory/pages/InventoryCountPage'), 'InventoryCountPage');
+const OpeningBalanceImportPage = lazyPage(() => import('../../features/inventory/pages/OpeningBalanceImportPage'), 'OpeningBalanceImportPage');
+const WarehousesPage = lazyPage(() => import('../../features/inventory/pages/WarehousesPage'), 'WarehousesPage');
+const StockAlertsPage = lazyPage(() => import('../../features/inventory/pages/StockAlertsPage'), 'StockAlertsPage');
 
 // Transfers Module Pages
-import { TransfersListPage } from '../../features/transfers/pages/TransfersListPage';
-import { TransferCreatePage } from '../../features/transfers/pages/TransferCreatePage';
-import { TransferDetailPage } from '../../features/transfers/pages/TransferDetailPage';
+const TransfersListPage = lazyPage(() => import('../../features/transfers/pages/TransfersListPage'), 'TransfersListPage');
+const TransferCreatePage = lazyPage(() => import('../../features/transfers/pages/TransferCreatePage'), 'TransferCreatePage');
+const TransferDetailPage = lazyPage(() => import('../../features/transfers/pages/TransferDetailPage'), 'TransferDetailPage');
 
 // Administration Module Pages
-import { CompanyProfilePage } from '../../features/admin/pages/CompanyProfilePage';
-import { BranchesAdminPage } from '../../features/admin/pages/BranchesAdminPage';
-import { WarehousesAdminPage } from '../../features/admin/pages/WarehousesAdminPage';
-import { UsersAdminPage } from '../../features/admin/pages/UsersAdminPage';
-import { RolesPermissionsPage } from '../../features/admin/pages/RolesPermissionsPage';
-import { DocumentNumberingPage } from '../../features/admin/pages/DocumentNumberingPage';
-import { TaxSettingsPage } from '../../features/admin/pages/TaxSettingsPage';
-import { IntegrationsPage } from '../../features/admin/pages/IntegrationsPage';
-import { SystemHealthPage } from '../../features/admin/pages/SystemHealthPage';
-import { AuditLogPage } from '../../features/admin/pages/AuditLogPage';
+const CompanyProfilePage = lazyPage(() => import('../../features/admin/pages/CompanyProfilePage'), 'CompanyProfilePage');
+const BranchesAdminPage = lazyPage(() => import('../../features/admin/pages/BranchesAdminPage'), 'BranchesAdminPage');
+const WarehousesAdminPage = lazyPage(() => import('../../features/admin/pages/WarehousesAdminPage'), 'WarehousesAdminPage');
+const UsersAdminPage = lazyPage(() => import('../../features/admin/pages/UsersAdminPage'), 'UsersAdminPage');
+const RolesPermissionsPage = lazyPage(() => import('../../features/admin/pages/RolesPermissionsPage'), 'RolesPermissionsPage');
+const DocumentNumberingPage = lazyPage(() => import('../../features/admin/pages/DocumentNumberingPage'), 'DocumentNumberingPage');
+const TaxSettingsPage = lazyPage(() => import('../../features/admin/pages/TaxSettingsPage'), 'TaxSettingsPage');
+const IntegrationsPage = lazyPage(() => import('../../features/admin/pages/IntegrationsPage'), 'IntegrationsPage');
+const SystemHealthPage = lazyPage(() => import('../../features/admin/pages/SystemHealthPage'), 'SystemHealthPage');
+const AuditLogPage = lazyPage(() => import('../../features/admin/pages/AuditLogPage'), 'AuditLogPage');
+const UserAccessReviewPage = lazyPage(() => import('../../features/admin/pages/UserAccessReviewPage'), 'UserAccessReviewPage');
+const SecurityEventsPage = lazyPage(() => import('../../features/admin/pages/SecurityEventsPage'), 'SecurityEventsPage');
+const SecuritySettingsPage = lazyPage(() => import('../../features/admin/pages/SecuritySettingsPage'), 'SecuritySettingsPage');
+const SuspiciousActivityPage = lazyPage(() => import('../../features/admin/pages/SuspiciousActivityPage'), 'SuspiciousActivityPage');
+const DataProtectionPage = lazyPage(() => import('../../features/admin/pages/DataProtectionPage'), 'DataProtectionPage');
+const NotificationsCenterPage = lazyPage(() => import('../../features/admin/pages/NotificationsCenterPage'), 'NotificationsCenterPage');
+const NotificationPreferencesPage = lazyPage(() => import('../../features/admin/pages/NotificationPreferencesPage'), 'NotificationPreferencesPage');
+const AlertRulesAdminPage = lazyPage(() => import('../../features/admin/pages/AlertRulesAdminPage'), 'AlertRulesAdminPage');
+const ApprovalsInboxPage = lazyPage(() => import('../../features/admin/pages/ApprovalsInboxPage'), 'ApprovalsInboxPage');
+const SystemSettingsPage = lazyPage(() => import('../../features/admin/pages/SystemSettingsPage'), 'SystemSettingsPage');
 
 // POS Module Page
-import { PosTerminalPage } from '../../features/pos/pages/PosTerminalPage';
+const PosTerminalPage = lazyPage(() => import('../../features/pos/pages/PosTerminalPage'), 'PosTerminalPage');
+
+// Supplier & Purchasing Module Pages
+const SuppliersListPage = lazyPage(() => import('../../features/suppliers/pages/SuppliersListPage'), 'SuppliersListPage');
+const SupplierDetailPage = lazyPage(() => import('../../features/suppliers/pages/SupplierDetailPage'), 'SupplierDetailPage');
+const PurchaseRequestsPage = lazyPage(() => import('../../features/purchasing/pages/PurchaseRequestsPage'), 'PurchaseRequestsPage');
+const PurchaseRequestFormPage = lazyPage(() => import('../../features/purchasing/pages/PurchaseRequestFormPage'), 'PurchaseRequestFormPage');
+const PurchaseOrdersPage = lazyPage(() => import('../../features/purchasing/pages/PurchaseOrdersPage'), 'PurchaseOrdersPage');
+const PurchaseOrderFormPage = lazyPage(() => import('../../features/purchasing/pages/PurchaseOrderFormPage'), 'PurchaseOrderFormPage');
+const PurchaseOrderDetailPage = lazyPage(() => import('../../features/purchasing/pages/PurchaseOrderDetailPage'), 'PurchaseOrderDetailPage');
+const GoodsReceiptPage = lazyPage(() => import('../../features/purchasing/pages/GoodsReceiptPage'), 'GoodsReceiptPage');
+const GoodsReceiptFormPage = lazyPage(() => import('../../features/purchasing/pages/GoodsReceiptFormPage'), 'GoodsReceiptFormPage');
+const GoodsReceiptDetailPage = lazyPage(() => import('../../features/purchasing/pages/GoodsReceiptDetailPage'), 'GoodsReceiptDetailPage');
+const SupplierInvoicesPage = lazyPage(() => import('../../features/purchasing/pages/SupplierInvoicesPage'), 'SupplierInvoicesPage');
+const SupplierPaymentsPage = lazyPage(() => import('../../features/purchasing/pages/SupplierPaymentsPage'), 'SupplierPaymentsPage');
+const PurchasingReportsPage = lazyPage(() => import('../../features/purchasing/pages/PurchasingReportsPage'), 'PurchasingReportsPage');
+
+// Finance Module Pages
+const FinanceOverviewPage = lazyPage(() => import('../../features/finance/pages/FinanceOverviewPage'), 'FinanceOverviewPage');
+const CashBankAccountsPage = lazyPage(() => import('../../features/finance/pages/CashBankAccountsPage'), 'CashBankAccountsPage');
+const ReconciliationPage = lazyPage(() => import('../../features/finance/pages/ReconciliationPage'), 'ReconciliationPage');
+const ExpensesPage = lazyPage(() => import('../../features/finance/pages/ExpensesPage'), 'ExpensesPage');
+const PayablesReceivablesPage = lazyPage(() => import('../../features/finance/pages/PayablesReceivablesPage'), 'PayablesReceivablesPage');
+const BudgetsPage = lazyPage(() => import('../../features/finance/pages/BudgetsPage'), 'BudgetsPage');
+const FinancialReportsPage = lazyPage(() => import('../../features/finance/pages/FinancialReportsPage'), 'FinancialReportsPage');
+const AccountingBoundaryPage = lazyPage(() => import('../../features/finance/pages/AccountingBoundaryPage'), 'AccountingBoundaryPage');
+const FinanceApprovalsPage = lazyPage(() => import('../../features/finance/pages/FinanceApprovalsPage'), 'FinanceApprovalsPage');
+
+// HR Module Pages
+const EmployeesPage = lazyPage(() => import('../../features/hr/pages/EmployeesPage'), 'EmployeesPage');
+const EmployeeDetailPage = lazyPage(() => import('../../features/hr/pages/EmployeeDetailPage'), 'EmployeeDetailPage');
+const SchedulesPage = lazyPage(() => import('../../features/hr/pages/SchedulesPage'), 'SchedulesPage');
+const AttendancePage = lazyPage(() => import('../../features/hr/pages/AttendancePage'), 'AttendancePage');
+const LeavePage = lazyPage(() => import('../../features/hr/pages/LeavePage'), 'LeavePage');
+const PayrollPage = lazyPage(() => import('../../features/hr/pages/PayrollPage'), 'PayrollPage');
+const HrReportsPage = lazyPage(() => import('../../features/hr/pages/HrReportsPage'), 'HrReportsPage');
+const HrPrivacyPage = lazyPage(() => import('../../features/hr/pages/HrPrivacyPage'), 'HrPrivacyPage');
+
+// Marketing Module Pages
+const CampaignsPage = lazyPage(() => import('../../features/marketing/pages/CampaignsPage'), 'CampaignsPage');
+const PromotionsPage = lazyPage(() => import('../../features/marketing/pages/PromotionsPage'), 'PromotionsPage');
+const PromoCodesPage = lazyPage(() => import('../../features/marketing/pages/PromoCodesPage'), 'PromoCodesPage');
+const CampaignPerformancePage = lazyPage(() => import('../../features/marketing/pages/CampaignPerformancePage'), 'CampaignPerformancePage');
+const MarketingApprovalsPage = lazyPage(() => import('../../features/marketing/pages/MarketingApprovalsPage'), 'MarketingApprovalsPage');
+const CommunicationsPage = lazyPage(() => import('../../features/marketing/pages/CommunicationsPage'), 'CommunicationsPage');
+
+// CRM Module Pages
+const CustomersPage = lazyPage(() => import('../../features/crm/pages/CustomersPage'), 'CustomersPage');
+const CustomerDetailPage = lazyPage(() => import('../../features/crm/pages/CustomerDetailPage'), 'CustomerDetailPage');
+const SegmentsPage = lazyPage(() => import('../../features/crm/pages/SegmentsPage'), 'SegmentsPage');
+const LoyaltyProgramPage = lazyPage(() => import('../../features/crm/pages/LoyaltyProgramPage'), 'LoyaltyProgramPage');
+
+// Reports & BI Module Pages
+const ReportsCatalogPage = lazyPage(() => import('../../features/reports/pages/ReportsCatalogPage'), 'ReportsCatalogPage');
+const ReportViewerPage = lazyPage(() => import('../../features/reports/pages/ReportViewerPage'), 'ReportViewerPage');
+const ReportBuilderPage = lazyPage(() => import('../../features/reports/pages/ReportBuilderPage'), 'ReportBuilderPage');
+const ScheduledReportsPage = lazyPage(() => import('../../features/reports/pages/ScheduledReportsPage'), 'ScheduledReportsPage');
+const ExecutiveDashboardPage = lazyPage(() => import('../../features/bi/pages/ExecutiveDashboardPage'), 'ExecutiveDashboardPage');
+const InventoryIntelligencePage = lazyPage(() => import('../../features/bi/pages/InventoryIntelligencePage'), 'InventoryIntelligencePage');
+const CustomerAnalyticsPage = lazyPage(() => import('../../features/bi/pages/CustomerAnalyticsPage'), 'CustomerAnalyticsPage');
+const ProfitabilityPage = lazyPage(() => import('../../features/bi/pages/ProfitabilityPage'), 'ProfitabilityPage');
+const AnomaliesPage = lazyPage(() => import('../../features/bi/pages/AnomaliesPage'), 'AnomaliesPage');
 
 // Business Modules Placeholders
-import { ModulePlaceholderPage } from '../../features/modules/pages/ModulePlaceholderPage';
+const ModulePlaceholderPage = lazyPage(() => import('../../features/modules/pages/ModulePlaceholderPage'), 'ModulePlaceholderPage');
 
 // Feedback Pages
-import { NotFoundPage } from '../../components/feedback/NotFoundPage';
-import { ForbiddenPage } from '../../components/feedback/ForbiddenPage';
-import { ServerErrorPage } from '../../components/feedback/ServerErrorPage';
+const NotFoundPage = lazyPage(() => import('../../components/feedback/NotFoundPage'), 'NotFoundPage');
+const ForbiddenPage = lazyPage(() => import('../../components/feedback/ForbiddenPage'), 'ForbiddenPage');
+const ServerErrorPage = lazyPage(() => import('../../components/feedback/ServerErrorPage'), 'ServerErrorPage');
 
 export const router = createBrowserRouter([
   // Public Auth Routes
   {
     path: '/auth/login',
-    element: <LoginPage />,
+    element: (
+      <Suspense fallback={<PageSkeleton />}>
+        <LoginPage />
+      </Suspense>
+    ),
   },
   {
     path: '/auth/forgot-password',
-    element: <ForgotPasswordPage />,
+    element: (
+      <Suspense fallback={<PageSkeleton />}>
+        <ForgotPasswordPage />
+      </Suspense>
+    ),
   },
   {
     path: '/auth/reset-password',
-    element: <ResetPasswordPage />,
+    element: (
+      <Suspense fallback={<PageSkeleton />}>
+        <ResetPasswordPage />
+      </Suspense>
+    ),
   },
 
   // Dedicated Full-Screen POS Terminal Route
@@ -78,7 +173,9 @@ export const router = createBrowserRouter([
     path: '/pos',
     element: (
       <ProtectedRoute requiredPermission="pos.terminal.access">
-        <PosTerminalPage />
+        <Suspense fallback={<PageSkeleton />}>
+          <PosTerminalPage />
+        </Suspense>
       </ProtectedRoute>
     ),
   },
@@ -262,26 +359,100 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      // Purchasing & Suppliers Module Routes
       {
         path: 'procurement',
         element: (
           <ProtectedRoute requiredPermission="procurement.orders.view">
-            <ModulePlaceholderPage
-              moduleName="Satınalma Sifarişləri"
-              category="Məhsul və Anbar"
-              description="Xarici və yerli təchizatçılardan sifarişlər, gömrük və qaimə qəbulları."
-              requiredPermission="procurement.orders.view"
-              kpis={[
-                { label: 'Aktiv Satınalmalar', value: '6 qaimə' },
-                { label: 'Gözlənilən Çatdırılma', value: '3 gün' },
-                {
-                  label: 'Sifariş Həcmi (Maya)',
-                  value: '32,100.00 ₼',
-                  isSensitive: true,
-                  permission: 'procurement.supplier_price.view',
-                },
-              ]}
-            />
+            <PurchaseOrdersPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/requests',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.view">
+            <PurchaseRequestsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/requests/new',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.create">
+            <PurchaseRequestFormPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/orders',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.view">
+            <PurchaseOrdersPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/orders/new',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.create">
+            <PurchaseOrderFormPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/orders/:id',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.view">
+            <PurchaseOrderDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/goods-receipts',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.view">
+            <GoodsReceiptPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/goods-receipts/new',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.create">
+            <GoodsReceiptFormPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/goods-receipts/:id',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.view">
+            <GoodsReceiptDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/invoices',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.view">
+            <SupplierInvoicesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/payments',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.view">
+            <SupplierPaymentsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'purchasing/reports',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.orders.view">
+            <PurchasingReportsPage />
           </ProtectedRoute>
         ),
       },
@@ -289,17 +460,15 @@ export const router = createBrowserRouter([
         path: 'suppliers',
         element: (
           <ProtectedRoute requiredPermission="procurement.suppliers.view">
-            <ModulePlaceholderPage
-              moduleName="Təchizatçılar"
-              category="Məhsul və Anbar"
-              description="Tərəfdaş brendlər, müqavilələr və təchizatçı borc-alacaq qalıqları."
-              requiredPermission="procurement.suppliers.view"
-              kpis={[
-                { label: 'Qeydiyyatdakı Təchizatçılar', value: '28 şirkət' },
-                { label: 'Aktiv Müqavilələr', value: '19' },
-                { label: 'Gecikmiş Ödənişlər', value: '0.00 ₼' },
-              ]}
-            />
+            <SuppliersListPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'suppliers/:id',
+        element: (
+          <ProtectedRoute requiredPermission="procurement.suppliers.view">
+            <SupplierDetailPage />
           </ProtectedRoute>
         ),
       },
@@ -309,17 +478,71 @@ export const router = createBrowserRouter([
         path: 'finance',
         element: (
           <ProtectedRoute requiredPermission="finance.ledger.view">
-            <ModulePlaceholderPage
-              moduleName="Maliyyə və Kassa"
-              category="Maliyyə"
-              description="Baş kitab, kassa qalıqları, gündəlik xərclər və bank hesabları."
-              requiredPermission="finance.ledger.view"
-              kpis={[
-                { label: 'Kassa Qalığı (Cəmi)', value: '18,420.50 ₼' },
-                { label: 'Bank Hesabı', value: '45,800.00 ₼' },
-                { label: 'Cari Ay Xərcləri', value: '6,210.00 ₼' },
-              ]}
-            />
+            <FinanceOverviewPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'finance/accounts',
+        element: (
+          <ProtectedRoute requiredPermission="finance.cash.view">
+            <CashBankAccountsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'finance/reconciliation',
+        element: (
+          <ProtectedRoute requiredPermission="finance.reconcile">
+            <ReconciliationPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'finance/expenses',
+        element: (
+          <ProtectedRoute requiredPermission="finance.expense.view">
+            <ExpensesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'finance/payables-receivables',
+        element: (
+          <ProtectedRoute requiredPermission="finance.ledger.view">
+            <PayablesReceivablesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'finance/budgets',
+        element: (
+          <ProtectedRoute requiredPermission="finance.budget.manage">
+            <BudgetsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'finance/reports',
+        element: (
+          <ProtectedRoute requiredPermission="finance.report.view">
+            <FinancialReportsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'finance/accounting-boundary',
+        element: (
+          <ProtectedRoute requiredPermission="finance.ledger.view">
+            <AccountingBoundaryPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'finance/approvals',
+        element: (
+          <ProtectedRoute requiredPermission="finance.expense.approve">
+            <FinanceApprovalsPage />
           </ProtectedRoute>
         ),
       },
@@ -365,58 +588,246 @@ export const router = createBrowserRouter([
         path: 'hr',
         element: (
           <ProtectedRoute requiredPermission="hr.employees.view">
-            <ModulePlaceholderPage
-              moduleName="Əməkdaşlar və HR"
-              category="İnsan və Müştəri"
-              description="Ştat cədvəli, iş qrafikləri və əməkdaşların performans qeydiyyatı."
-              requiredPermission="hr.employees.view"
-              kpis={[
-                { label: 'Ümumi Ştat', value: '34 əməkdaş' },
-                { label: 'Növbədə Olanlar', value: '16 nəfər' },
-                {
-                  label: 'Aylıq Əməkhaqqı Fondu',
-                  value: '28,400.00 ₼',
-                  isSensitive: true,
-                  permission: 'hr.salary.view',
-                },
-              ]}
-            />
+            <EmployeesPage />
           </ProtectedRoute>
         ),
       },
+      {
+        path: 'hr/employees',
+        element: (
+          <ProtectedRoute requiredPermission="hr.employees.view">
+            <EmployeesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'hr/employees/:id',
+        element: (
+          <ProtectedRoute requiredPermission="hr.employees.view">
+            <EmployeeDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'hr/schedules',
+        element: (
+          <ProtectedRoute requiredPermission="hr.employees.view">
+            <SchedulesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'hr/attendance',
+        element: (
+          <ProtectedRoute requiredPermission="hr.employees.view">
+            <AttendancePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'hr/leave',
+        element: (
+          <ProtectedRoute requiredPermission="hr.employees.view">
+            <LeavePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'hr/payroll',
+        element: (
+          <ProtectedRoute requiredPermission="hr.employees.view">
+            <PayrollPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'hr/reports',
+        element: (
+          <ProtectedRoute requiredPermission="hr.employees.view">
+            <HrReportsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'hr/privacy',
+        element: (
+          <ProtectedRoute requiredPermission="hr.employees.view">
+            <HrPrivacyPage />
+          </ProtectedRoute>
+        ),
+      },
+      // CRM & Loyalty Module
       {
         path: 'crm',
         element: (
           <ProtectedRoute requiredPermission="crm.customers.view">
-            <ModulePlaceholderPage
-              moduleName="Müştəri Bazası (CRM)"
-              category="İnsan və Müştəri"
-              description="Loyallıq proqramı, bonus kartları, müştəri alış tarixçəsi və seqmentasiya."
-              requiredPermission="crm.customers.view"
-              kpis={[
-                { label: 'Qeydiyyatdakı Müştərilər', value: '4,890 nəfər' },
-                { label: 'Aktiv Loyallıq Kartları', value: '3,120' },
-                { label: 'Təkrar Alış Nisbəti', value: '64%' },
-              ]}
-            />
+            <CustomersPage />
           </ProtectedRoute>
         ),
       },
       {
+        path: 'crm/customers',
+        element: (
+          <ProtectedRoute requiredPermission="crm.customers.view">
+            <CustomersPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'crm/customers/:id',
+        element: (
+          <ProtectedRoute requiredPermission="crm.customers.view">
+            <CustomerDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'crm/segments',
+        element: (
+          <ProtectedRoute requiredPermission="crm.customers.view">
+            <SegmentsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'crm/loyalty',
+        element: (
+          <ProtectedRoute requiredPermission="crm.customers.view">
+            <LoyaltyProgramPage />
+          </ProtectedRoute>
+        ),
+      },
+
+      // Marketing Module
+      {
         path: 'marketing',
         element: (
           <ProtectedRoute requiredPermission="marketing.campaigns.view">
-            <ModulePlaceholderPage
-              moduleName="Marketinq və Kampaniyalar"
-              category="İnsan və Müştəri"
-              description="Mövsümi endirimlər, promokodlar və SMS bildiriş kampaniyaları."
-              requiredPermission="marketing.campaigns.view"
-              kpis={[
-                { label: 'Aktiv Aksiyalar', value: '3 kampaniya' },
-                { label: 'Tətbiq Edilən Endirim Həcmi', value: '4,150.00 ₼' },
-                { label: 'SMS Çatdırılma Faizi', value: '98.6%' },
-              ]}
-            />
+            <CampaignsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'marketing/campaigns',
+        element: (
+          <ProtectedRoute requiredPermission="marketing.campaigns.view">
+            <CampaignsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'marketing/promotions',
+        element: (
+          <ProtectedRoute requiredPermission="marketing.discounts.manage">
+            <PromotionsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'marketing/promo-codes',
+        element: (
+          <ProtectedRoute requiredPermission="marketing.campaigns.view">
+            <PromoCodesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'marketing/performance',
+        element: (
+          <ProtectedRoute requiredPermission="marketing.campaigns.view">
+            <CampaignPerformancePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'marketing/approvals',
+        element: (
+          <ProtectedRoute requiredPermission="marketing.approvals.manage">
+            <MarketingApprovalsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'marketing/communications',
+        element: (
+          <ProtectedRoute requiredPermission="marketing.communications.send">
+            <CommunicationsPage />
+          </ProtectedRoute>
+        ),
+      },
+
+      // Reports Module (Hesabatlar Mərkəzi)
+      {
+        path: 'reports',
+        element: (
+          <ProtectedRoute requiredPermission="reports.standard.view">
+            <ReportsCatalogPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'reports/view/:reportId',
+        element: (
+          <ProtectedRoute requiredPermission="reports.standard.view">
+            <ReportViewerPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'reports/builder',
+        element: (
+          <ProtectedRoute requiredPermission="reports.custom.create">
+            <ReportBuilderPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'reports/scheduled',
+        element: (
+          <ProtectedRoute requiredPermission="reports.schedule.manage">
+            <ScheduledReportsPage />
+          </ProtectedRoute>
+        ),
+      },
+
+      // BI & Analytics Module (Biznes İntellekti)
+      {
+        path: 'analytics',
+        element: (
+          <ProtectedRoute requiredPermission="reports.bi.view">
+            <ExecutiveDashboardPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'analytics/inventory',
+        element: (
+          <ProtectedRoute requiredPermission="reports.bi.view">
+            <InventoryIntelligencePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'analytics/customers',
+        element: (
+          <ProtectedRoute requiredPermission="reports.bi.view">
+            <CustomerAnalyticsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'analytics/profitability',
+        element: (
+          <ProtectedRoute requiredPermission="reports.bi.view">
+            <ProfitabilityPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'analytics/anomalies',
+        element: (
+          <ProtectedRoute requiredPermission="reports.bi.view">
+            <AnomaliesPage />
           </ProtectedRoute>
         ),
       },
@@ -499,6 +910,78 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute requiredPermission="admin.audit.view">
             <AuditLogPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/access-review',
+        element: (
+          <ProtectedRoute requiredPermission="admin.access_review.manage">
+            <UserAccessReviewPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/security-events',
+        element: (
+          <ProtectedRoute requiredPermission="admin.security.view">
+            <SecurityEventsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/security-settings',
+        element: (
+          <ProtectedRoute requiredPermission="admin.security.manage">
+            <SecuritySettingsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/suspicious-activity',
+        element: (
+          <ProtectedRoute requiredPermission="admin.security.view">
+            <SuspiciousActivityPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/data-protection',
+        element: (
+          <ProtectedRoute requiredPermission="admin.security.manage">
+            <DataProtectionPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/alert-rules',
+        element: (
+          <ProtectedRoute requiredPermission="notifications.rules.manage">
+            <AlertRulesAdminPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/settings',
+        element: (
+          <ProtectedRoute requiredPermission="settings.system.manage">
+            <SystemSettingsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'notifications',
+        element: <NotificationsCenterPage />,
+      },
+      {
+        path: 'notifications/preferences',
+        element: <NotificationPreferencesPage />,
+      },
+      {
+        path: 'approvals',
+        element: (
+          <ProtectedRoute requiredPermission="approvals.inbox.view">
+            <ApprovalsInboxPage />
           </ProtectedRoute>
         ),
       },

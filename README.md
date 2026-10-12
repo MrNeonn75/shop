@@ -301,16 +301,19 @@ Hər bir vidjet öz müstəqil TanStack Query sorğusuna, Skeleton yüklənmə v
 
 ## 8. Testlər və Keyfiyyət Təminatı
 
-Layihədə 79 vahid testi və Playwright E2E testləri mövcuddur:
+Layihədə 285 vahid və inteqrasiya testi mövcuddur (100% uğurla keçir):
 
 ```bash
-# Vitest testlərini icra etmək (8 test faylı, 79 test)
+# Vitest testlərini icra etmək (21 test faylı, 285 test, 0 xəta)
 npm test
 
-# ESLint kod keyfiyyətini yoxlamaq (0 xəta, 0 xəbərdarlıq)
+# TypeScript ciddi tip yoxlanışı (0 xəta)
+npx tsc --noEmit
+
+# ESLint kod keyfiyyətini yoxlamaq (0 xəta, 0 any, no-restricted-syntax hex bloklaması)
 npm run lint
 
-# Production qurucusu və TypeScript tip yoxlanışı (3025 modul)
+# Production qurucusu və kod bölünməsi (Rollup manual chunks ilə initial shell cəmi 105 KB gzip)
 npm run build
 
 # Playwright E2E testlərini icra etmək

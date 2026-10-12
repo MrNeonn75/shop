@@ -50,7 +50,7 @@ export const BarcodeSvg: React.FC<BarcodeSvgProps> = ({
             y={0}
             width={currentRun * moduleWidth}
             height={barHeight}
-            fill="#000000"
+            fill="currentColor"
           />
         );
         currentRun = 0;
@@ -66,7 +66,7 @@ export const BarcodeSvg: React.FC<BarcodeSvgProps> = ({
         y={0}
         width={currentRun * moduleWidth}
         height={barHeight}
-        fill="#000000"
+        fill="currentColor"
       />
     );
   }

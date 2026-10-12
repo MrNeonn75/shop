@@ -8,10 +8,19 @@ import { BrandLogo } from '../../../components/ui/BrandLogo';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
 
+function getSafeRedirectUrl(raw: string | null): string {
+  if (!raw) return '/';
+  // Enforce relative path starting with single '/' and no protocol-relative or backslash exploits
+  if (raw.startsWith('/') && !raw.startsWith('//') && !raw.includes('\\')) {
+    return raw;
+  }
+  return '/';
+}
+
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirectPath = searchParams.get('redirect') || '/';
+  const redirectPath = getSafeRedirectUrl(searchParams.get('redirect'));
 
   const { loginWithCredentials, loginDemo, lockoutUntil } = useSessionStore();
 

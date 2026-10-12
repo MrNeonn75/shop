@@ -2,15 +2,19 @@ import { test, expect } from '@playwright/test';
 
 test.describe('POS Terminal Module E2E Flows', () => {
   test.beforeEach(async ({ page }) => {
-    // 1. Log in as Cashier
-    await page.goto('/auth/login');
+    // 1. Log in as Cashier with redirect to full-screen POS terminal
+    await page.goto('/auth/login?redirect=/pos');
     const cashierBtn = page.locator('button:has-text("Kassir")');
     await cashierBtn.click();
-    await page.waitForURL('/');
-
-    // 2. Navigate to full-screen POS terminal
-    await page.goto('/pos');
+    await page.waitForURL('/pos');
     await expect(page.locator('header:has-text("POS")')).toBeVisible();
+
+    // Ensure register has an open shift (re-opens if a previous test closed it)
+    const openShiftBtn = page.locator('button:has-text("Növbəni Aç")');
+    if (await openShiftBtn.isVisible()) {
+      await openShiftBtn.click();
+      await page.locator('button:has-text("Sayımı Təsdiq Et və Növbəni Aç")').click();
+    }
   });
 
   test('1. Scan / Add Product and Pay Cash (Happy Path Receipt)', async ({ page }) => {
@@ -24,7 +28,7 @@ test.describe('POS Terminal Module E2E Flows', () => {
 
     // Verify item is added to the cart on right pane
     await expect(page.locator('text=Ara Cəmi')).toBeVisible();
-    await expect(page.locator('text=YEKUN:')).toBeVisible();
+    await expect(page.locator('text=Yekun Məbləğ')).toBeVisible();
 
     // Click big Pay (F10) button
     const payBtn = page.locator('button:has-text("ÖDƏNİŞ (F10)")');
@@ -79,7 +83,7 @@ test.describe('POS Terminal Module E2E Flows', () => {
 
     // Verify 50.00 AZN added in tenders list
     await expect(page.locator('text=Daxil Edilən Ödənişlər:')).toBeVisible();
-    await expect(page.locator('text=Nağd Pul')).toBeVisible();
+    await expect(page.getByText('Nağd Pul').first()).toBeVisible();
 
     // Switch tender type to Card
     await page.locator('button:has-text("Bank Kartı")').first().click();

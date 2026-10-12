@@ -57,13 +57,13 @@ export const PaymentModal: React.FC = () => {
     if (isPaymentModalOpen) {
       setTenders([]);
       setSelectedTenderType('cash');
-      setTenderAmountInput((remainingDue / 100).toFixed(2));
-      setCashTenderedInput((remainingDue / 100).toFixed(2));
+      setTenderAmountInput((grandTotal / 100).toFixed(2));
+      setCashTenderedInput((grandTotal / 100).toFixed(2));
       setCardAuthReference('');
       setErrorMessage(null);
       setIsProcessing(false);
     }
-  }, [isPaymentModalOpen, remainingDue]);
+  }, [isPaymentModalOpen, grandTotal]);
 
   // Update suggested input when remaining due changes
   useEffect(() => {

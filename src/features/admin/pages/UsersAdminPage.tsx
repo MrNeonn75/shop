@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../../components/ui/PageHeader';
 import { Breadcrumbs } from '../../../components/ui/Breadcrumbs';
 import { Card, CardContent } from '../../../components/ui/Card';
@@ -14,6 +15,9 @@ import {
 } from '../../../shared/adapters/mock/adminMockData';
 import { ROLE_LABELS, UserRole } from '../../../shared/utils/permissions';
 import { formatDateTime } from '../../../shared/utils/formatters';
+import { calculateUserInactivity } from '../utils/effectivePermissionsEngine';
+import { ManagerPinModal } from '../components/ManagerPinModal';
+import { TemporaryAccessModal } from '../components/TemporaryAccessModal';
 import {
   UserPlus,
   Search,
@@ -22,9 +26,14 @@ import {
   UserCheck,
   UserX,
   Building2,
+  Clock,
+  ShieldCheck,
+  Lock,
+  AlertTriangle,
 } from 'lucide-react';
 
 export const UsersAdminPage: React.FC = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [users, setUsers] = useState<AdminUser[]>(MOCK_ADMIN_USERS);
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,6 +44,10 @@ export const UsersAdminPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<Partial<AdminUser> | null>(null);
   const [userToSuspend, setUserToSuspend] = useState<AdminUser | null>(null);
+
+  // Manager PIN & Temp Access State
+  const [pinModalUser, setPinModalUser] = useState<AdminUser | null>(null);
+  const [isTempAccessOpen, setIsTempAccessOpen] = useState(false);
 
   const filteredUsers = useMemo(() => {
     return users.filter((u) => {
@@ -158,10 +171,28 @@ export const UsersAdminPage: React.FC = () => {
           </Badge>
         }
         actions={
-          <Button variant="default" size="sm" onClick={handleOpenCreate}>
-            <UserPlus className="h-4 w-4 mr-2" />
-            Yeni İstifadəçi Əlavə Et
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/admin/access-review')}
+            >
+              <ShieldCheck className="h-4 w-4 mr-1.5" />
+              Giriş Təftişi (Review)
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsTempAccessOpen(true)}
+            >
+              <Clock className="h-4 w-4 mr-1.5" />
+              Müvəqqəti Giriş & Nümayəndəlik
+            </Button>
+            <Button variant="default" size="sm" onClick={handleOpenCreate}>
+              <UserPlus className="h-4 w-4 mr-1.5" />
+              Yeni İstifadəçi
+            </Button>
+          </div>
         }
       />
 
@@ -261,7 +292,15 @@ export const UsersAdminPage: React.FC = () => {
                     </div>
                   </td>
                   <td className="py-3 px-4 text-muted-foreground font-mono text-[11px]">
-                    {formatDateTime(u.lastLoginAt)}
+                    <div className="flex flex-col">
+                      <span>{formatDateTime(u.lastLoginAt)}</span>
+                      {calculateUserInactivity(u.lastLoginAt).isInactive30d && (
+                        <span className="text-[10px] text-amber-500 font-sans flex items-center gap-1 font-medium mt-0.5">
+                          <AlertTriangle className="h-3 w-3 shrink-0" />
+                          {calculateUserInactivity(u.lastLoginAt).inactivityDays} gün aktiv deyil
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="py-3 px-4">
                     {u.isActive ? (
@@ -276,6 +315,15 @@ export const UsersAdminPage: React.FC = () => {
                   </td>
                   <td className="py-3 px-4 text-right">
                     <div className="flex items-center justify-end gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setPinModalUser(u)}
+                        className="h-8 w-8 p-0"
+                        title="POS Menecer PIN Kodunu Tənzimlə"
+                      >
+                        <Lock className="h-3.5 w-3.5 text-bh-accent hover:text-bh-accent-hover" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -474,6 +522,36 @@ export const UsersAdminPage: React.FC = () => {
         confirmText={userToSuspend?.isActive ? 'Blokla' : 'Aktivləşdir'}
         cancelText="İmtina"
         variant={userToSuspend?.isActive ? 'danger' : 'default'}
+      />
+
+      {/* Manager PIN Modal */}
+      {pinModalUser && (
+        <ManagerPinModal
+          isOpen={Boolean(pinModalUser)}
+          onClose={() => setPinModalUser(null)}
+          user={pinModalUser}
+          onSuccess={() => {
+            toast({
+              type: 'success',
+              title: 'PIN Uğurla Tənzimləndi',
+              message: `${pinModalUser.name} üçün POS menecer PIN kodu yadda saxlanıldı.`,
+            });
+          }}
+        />
+      )}
+
+      {/* Temporary Access & Delegation Modal */}
+      <TemporaryAccessModal
+        isOpen={isTempAccessOpen}
+        onClose={() => setIsTempAccessOpen(false)}
+        users={users}
+        onSuccess={() => {
+          toast({
+            type: 'success',
+            title: 'Müvəqqəti Giriş Qeydə Alındı',
+            message: 'Müvəqqəti səlahiyyət və ya nümayəndəlik təyinatı uğurla təsdiqləndi.',
+          });
+        }}
       />
     </div>
   );

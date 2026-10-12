@@ -91,3 +91,23 @@ export function formatQty(quantity: number | null | undefined): string {
   }).format(quantity);
 }
 
+/**
+ * Convert string to uppercase respecting Azerbaijani orthography rules:
+ * - 'i' -> 'İ' (dotted capital I)
+ * - 'ı' -> 'I' (dotless capital I)
+ */
+export function toAzerbaijaniUpper(text: string): string {
+  if (!text) return '';
+  return text.toLocaleUpperCase('az');
+}
+
+/**
+ * Convert string to lowercase respecting Azerbaijani orthography rules:
+ * - 'I' -> 'ı' (dotless lowercase i)
+ * - 'İ' -> 'i' (dotted lowercase i)
+ */
+export function toAzerbaijaniLower(text: string): string {
+  if (!text) return '';
+  return text.toLocaleLowerCase('az');
+}
+

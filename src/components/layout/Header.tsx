@@ -9,10 +9,7 @@ import {
   Menu,
   Building2,
   Search,
-  Bell,
-  CheckCircle2,
   Globe,
-  AlertCircle,
 } from 'lucide-react';
 import { UserNav } from './UserNav';
 import { BrandLogo } from '../ui/BrandLogo';
@@ -27,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/DropdownMenu';
 import { MOCK_BRANCHES } from '../../shared/adapters/mock/mockData';
+import { NotificationBellDropdown } from '../../features/admin/components/NotificationBellDropdown';
 
 export const Header: React.FC = () => {
   const { resolvedTheme, toggleTheme } = useThemeStore();
@@ -35,7 +33,6 @@ export const Header: React.FC = () => {
   const { user, canAccessAllBranches } = usePermission();
 
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const [unreadNotifications, setUnreadNotifications] = useState(3);
 
   // Global Ctrl+K / Cmd+K shortcut listener
   useEffect(() => {
@@ -71,6 +68,23 @@ export const Header: React.FC = () => {
           </button>
 
           <BrandLogo size="md" className="hidden sm:inline-flex" />
+
+          {/* Environment Badge in Non-Production / Demo */}
+          {import.meta.env.VITE_DATA_SOURCE !== 'http' ? (
+            <span
+              className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30"
+              title="Sistem nümayiş (Demo) rejimində işləyir. Bütün göstəricilər nümayiş məqsədlidir."
+            >
+              DEMO REJİMİ
+            </span>
+          ) : !import.meta.env.PROD ? (
+            <span
+              className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30"
+              title="Test və sınaq mühiti (Staging)"
+            >
+              STAGING
+            </span>
+          ) : null}
 
           {/* Global Search Button Trigger (Ctrl+K) */}
           <button
@@ -120,62 +134,8 @@ export const Header: React.FC = () => {
             <Search className="h-4 w-4" />
           </button>
 
-          {/* Notifications Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                type="button"
-                className="relative rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                aria-label="Bildirişlər"
-              >
-                <Bell className="h-5 w-5" />
-                {unreadNotifications > 0 && (
-                  <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-danger" />
-                  </span>
-                )}
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80 p-0">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-                <span className="text-xs font-semibold text-foreground">
-                  Bildirişlər ({unreadNotifications})
-                </span>
-                {unreadNotifications > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setUnreadNotifications(0)}
-                    className="text-[11px] text-muted-foreground hover:text-foreground"
-                  >
-                    Hamısını oxunmuş et
-                  </button>
-                )}
-              </div>
-              <div className="divide-y divide-border max-h-72 overflow-y-auto">
-                <div className="p-3 text-xs flex gap-2.5 hover:bg-muted/40">
-                  <AlertCircle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-foreground">Kritik Stok Xəbərdarlığı</p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
-                      Massimo Dutti İpək Bluz (Gənclik Mall) qalıq sayı 2 ədəd qalıb.
-                    </p>
-                    <span className="text-[10px] text-muted-foreground mt-1 block">15 dəq əvvəl</span>
-                  </div>
-                </div>
-                <div className="p-3 text-xs flex gap-2.5 hover:bg-muted/40">
-                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-foreground">Transfer Təsdiqləndi</p>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
-                      #TR-2026-0042 transferi Mərkəzi Anbardan 28 May filialına çatdırıldı.
-                    </p>
-                    <span className="text-[10px] text-muted-foreground mt-1 block">1 saat əvvəl</span>
-                  </div>
-                </div>
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* Real-time Notifications Bell Dropdown */}
+          <NotificationBellDropdown />
 
           {/* Language Selector Dropdown (AZ active, EN & RU disabled "Tezliklə") */}
           <DropdownMenu>

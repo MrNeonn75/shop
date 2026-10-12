@@ -18,7 +18,11 @@ import {
   Search,
   Check,
   AlertTriangle,
+  BookOpen,
 } from 'lucide-react';
+import { detectSodViolations } from '../utils/sodEngine';
+import { SodWarningAlert } from '../components/SodWarningAlert';
+import { PermissionCatalogDrawer } from '../components/PermissionCatalogDrawer';
 
 interface CustomRoleItem {
   id: string;
@@ -87,10 +91,17 @@ export const RolesPermissionsPage: React.FC = () => {
   const [activeRoleId, setActiveRoleId] = useState<string>('r-3'); // Default to Branch Manager
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
 
   // Edited permissions buffer for active role
   const activeRole = roles.find((r) => r.id === activeRoleId) || roles[0];
   const [currentPermissions, setCurrentPermissions] = useState<string[]>(activeRole.permissions);
+
+  // SoD conflict detection for current role permissions
+  const sodViolations = useMemo(() => {
+    if (activeRole.key === 'superadmin') return [];
+    return detectSodViolations(currentPermissions);
+  }, [currentPermissions, activeRole.key]);
 
   // Sync buffer when switching active role
   const handleSelectRole = (role: CustomRoleItem) => {
@@ -207,6 +218,10 @@ export const RolesPermissionsPage: React.FC = () => {
         }
         actions={
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setIsCatalogOpen(true)}>
+              <BookOpen className="h-4 w-4 mr-2" />
+              İcazələr Kataloqu
+            </Button>
             <Button variant="outline" size="sm" onClick={handleCloneRole}>
               <Copy className="h-4 w-4 mr-2" />
               Rolu Kopyala (Clone)
@@ -293,6 +308,11 @@ export const RolesPermissionsPage: React.FC = () => {
                 Bu rola hazırda <strong className="text-foreground">{activeUserCount} aktiv istifadəçi</strong> təyin olunub. Buradakı hər hansı icazə dəyişikliyi həmin əməkdaşların sistemdəki səlahiyyətlərinə dərhal tətbiq olunacaq.
               </div>
             </div>
+          )}
+
+          {/* Segregation of Duties (SoD) Warning Alert */}
+          {sodViolations.length > 0 && (
+            <SodWarningAlert violations={sodViolations} />
           )}
 
           {/* Filter Bar */}
@@ -480,6 +500,12 @@ export const RolesPermissionsPage: React.FC = () => {
           </div>
         </div>
       </Modal>
+
+      {/* Permission Catalog Drawer */}
+      <PermissionCatalogDrawer
+        isOpen={isCatalogOpen}
+        onClose={() => setIsCatalogOpen(false)}
+      />
     </div>
   );
 };

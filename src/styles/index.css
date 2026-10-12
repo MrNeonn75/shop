@@ -45,3 +45,69 @@
   background-color: var(--muted-foreground);
 }
 
+/* ==========================================================================
+   Print Stylesheets (Thermal 58mm/80mm Receipts & Standard A4 Payslips)
+   ========================================================================== */
+@media print {
+  /* Hide all app chrome, navigation, sidebars, headers, and interactive buttons */
+  header,
+  nav,
+  aside,
+  button:not(.allow-print),
+  .no-print,
+  [data-no-print] {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 12pt;
+  }
+
+  /* 80mm Thermal POS Receipt */
+  .receipt-80mm {
+    width: 72mm !important;
+    max-width: 72mm !important;
+    margin: 0 auto !important;
+    padding: 2mm !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 10pt !important;
+    line-height: 1.2 !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+
+  /* 58mm Thermal POS Receipt */
+  .receipt-58mm {
+    width: 48mm !important;
+    max-width: 48mm !important;
+    margin: 0 auto !important;
+    padding: 1mm !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 8.5pt !important;
+    line-height: 1.15 !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+
+  /* A4 Document / Payslip / Invoice Sheet */
+  .payslip-sheet,
+  .printable-a4 {
+    width: 210mm !important;
+    margin: 10mm auto !important;
+    padding: 15mm !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    page-break-after: always;
+  }
+
+  /* Avoid page breaks inside table rows or cards */
+  tr,
+  .no-page-break {
+    page-break-inside: avoid !important;
+  }
+}
+
