@@ -144,9 +144,18 @@ export const ReturnExchangeModal: React.FC = () => {
             </div>
           )}
 
-          {foundReceipt && !successNotice && (
+          {foundReceipt && !successNotice && (() => {
+              // Calculate 14-day legal window (purchase day excluded)
+              const purchaseDate = new Date(foundReceipt.createdAt);
+              const now = new Date();
+              const diffMs = now.getTime() - purchaseDate.getTime();
+              const daysElapsed = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+              const daysRemaining = Math.max(0, 14 - daysElapsed);
+              const isExpired = daysElapsed > 14;
+
+              return (
             <div className="space-y-3">
-              <div className="p-3 bg-zinc-900 border border-zinc-800 rounded text-xs font-mono space-y-1">
+              <div className="p-3 bg-zinc-900 border border-zinc-800 rounded text-xs font-mono space-y-1.5">
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Çek №:</span>
                   <span className="font-bold text-white">{foundReceipt.receiptNumber}</span>
@@ -160,6 +169,40 @@ export const ReturnExchangeModal: React.FC = () => {
                   <span className="font-bold text-emerald-400">
                     {formatMoney(foundReceipt.grandTotalQapik)}
                   </span>
+                </div>
+                {/* 14-day Window Status */}
+                <div className="pt-2 border-t border-zinc-800 flex items-center justify-between">
+                  <span className="text-zinc-400">Qanuni Qaytarma Müddəti:</span>
+                  <span className={`font-semibold px-2 py-0.5 rounded text-[11px] ${
+                    isExpired
+                      ? 'bg-rose-950 text-rose-300 border border-rose-800'
+                      : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                  }`}>
+                    {isExpired
+                      ? 'Müddət bitib (>14 gün)'
+                      : `14 gün (alış günü sayılmır) — qalan: ${daysRemaining} gün`}
+                  </span>
+                </div>
+              </div>
+
+              {/* Condition Checklist (Maddə 15) */}
+              <div className="p-3 bg-zinc-900/60 border border-zinc-800 rounded-lg text-xs space-y-2">
+                <div className="font-semibold text-zinc-300 text-[11px] uppercase tracking-wider">
+                  Qanuni Tələblər Yoxlanışı (İstehlakçıların hüquqları):
+                </div>
+                <div className="space-y-1.5 text-zinc-300 text-[11px]">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" defaultChecked className="rounded accent-emerald-500" />
+                    <span>Mal istifadə olunmayıb, əmtəə görünüşü qorunub</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" defaultChecked className="rounded accent-emerald-500" />
+                    <span>İstehlak xassələri, plomblar, fabrikin yarlıqları saxlanılıb</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" defaultChecked className="rounded accent-emerald-500" />
+                    <span>Kassa və ya əmtəə çeki təqdim edilib</span>
+                  </label>
                 </div>
               </div>
 
@@ -230,7 +273,8 @@ export const ReturnExchangeModal: React.FC = () => {
                 <span>Qaytarmanı Təsdiq Et</span>
               </button>
             </div>
-          )}
+              );
+            })()}
         </div>
       </div>
     </div>

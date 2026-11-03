@@ -9,6 +9,7 @@ import azBranches from './az/branches.json';
 import azAuth from './az/auth.json';
 import azUi from './az/ui.json';
 import azPos from './az/pos.json';
+import azCompliance from './az/compliance.json';
 
 // English translations (Architecture ready)
 import enCommon from './en/common.json';
@@ -27,12 +28,15 @@ export const resources = {
     auth: azAuth,
     ui: azUi,
     pos: azPos,
+    compliance: azCompliance,
   },
   en: {
     common: enCommon,
+    compliance: azCompliance,
   },
   ru: {
     common: ruCommon,
+    compliance: azCompliance,
   },
 } as const;
 
@@ -50,4 +54,3 @@ i18n.use(initReactI18next).init({
 });
 
 export default i18n;
-

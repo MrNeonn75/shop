@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePosStore } from '../stores/posStore';
 import { formatDateTime } from '../../../shared/utils/formatters';
+import { FiscalStatusWidget } from '../../compliance/components/FiscalStatusWidget';
 import {
   Wifi,
   WifiOff,
@@ -129,6 +130,9 @@ export const PosShiftHeader: React.FC = () => {
 
         {/* Right: Actions & Tools */}
         <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Fiscal Status Chip */}
+          <FiscalStatusWidget />
+
           {/* Network Status Indicator */}
           <div
             className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-mono min-h-[36px] ${

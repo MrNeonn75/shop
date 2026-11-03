@@ -1,0 +1,1 @@
+"""İnventar Modulu (Inventory Module)."""

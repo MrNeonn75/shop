@@ -110,6 +110,15 @@ export const SystemSettingsPage: React.FC = () => {
   const hasChanges = diffs.length > 0;
 
   const handleOpenSaveDiff = () => {
+    if (currentSettings && currentSettings.returnPolicy.returnWindowDays < 14) {
+      toast({
+        type: 'error',
+        title: 'Qanunvericilik pozuntusu',
+        message: 'Qanunvericiliklə müəyyən edilmiş qaytarma müddəti 14 gündən az ola bilməz (İstehlakçıların hüquqlarının müdafiəsi haqqında Qanun, Maddə 15).',
+      });
+      return;
+    }
+
     if (!hasChanges) {
       toast({
         type: 'info',
@@ -671,19 +680,30 @@ export const SystemSettingsPage: React.FC = () => {
                     <label className="font-semibold text-foreground">Qaytarma Müddəti (gün)</label>
                     <input
                       type="number"
+                      min={14}
                       value={currentSettings.returnPolicy.returnWindowDays}
                       onChange={(e) =>
                         setCurrentSettings({
                           ...currentSettings,
                           returnPolicy: {
                             ...currentSettings.returnPolicy,
-                            returnWindowDays: parseInt(e.target.value) || 14,
+                            returnWindowDays: parseInt(e.target.value) || 0,
                           },
                         })
                       }
-                      className="w-full rounded-md border border-input bg-background px-3 py-1.5 text-xs text-foreground font-mono"
+                      className={`w-full rounded-md border ${
+                        currentSettings.returnPolicy.returnWindowDays < 14
+                          ? 'border-destructive bg-destructive/10'
+                          : 'border-input bg-background'
+                      } px-3 py-1.5 text-xs text-foreground font-mono`}
                     />
-                    <span className="text-[10px] text-muted-foreground">AR İstehlakçıların hüquqları üzrə defolt 14 gündür.</span>
+                    {currentSettings.returnPolicy.returnWindowDays < 14 ? (
+                      <p className="text-[11px] font-medium text-destructive mt-1 flex items-center gap-1">
+                        <span>⚠️</span> Qanunvericiliklə müəyyən edilmiş qaytarma müddəti 14 gündən az ola bilməz (İstehlakçıların hüquqlarının müdafiəsi haqqında Qanun, Maddə 15).
+                      </p>
+                    ) : (
+                      <span className="text-[10px] text-muted-foreground">AR İstehlakçıların hüquqları üzrə minimal qanuni müddət 14 gündür.</span>
+                    )}
                   </div>
 
                   <div className="space-y-1">

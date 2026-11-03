@@ -9,7 +9,7 @@ import {
   Building2,
   AlertCircle,
 } from 'lucide-react';
-import { hrRepository } from '../../../shared/adapters';
+import { hrRepository, complianceRepository } from '../../../shared/adapters';
 import { PayrollPeriod, PayrollItem } from '../types';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
@@ -40,8 +40,19 @@ export const PayrollPage: React.FC = () => {
   // Branch Allocation Preview Modal
   const [isAllocationsModalOpen, setIsAllocationsModalOpen] = useState(false);
 
+  // Compliance Feature Gate State
+  const [payrollGate, setPayrollGate] = useState<{
+    allowed: boolean;
+    blockedReason?: string;
+    unverifiedPacks?: string[];
+    bannerOnly?: boolean;
+  } | null>(null);
+
   useEffect(() => {
     loadPeriods();
+    complianceRepository.checkFeatureGate('payroll_finalization').then((gate) => {
+      setPayrollGate(gate);
+    });
   }, []);
 
   useEffect(() => {
@@ -212,6 +223,90 @@ export const PayrollPage: React.FC = () => {
     });
   };
 
+  const handleExportDraftAccountantCsv = () => {
+    if (!items.length) {
+      toast({
+        title: 'Məlumat yoxdur',
+        description: 'İxrac üçün maaş sətirləri mövcud deyil',
+        variant: 'danger',
+      });
+      return;
+    }
+
+    const header = [
+      'Dövr',
+      'İşçi Kodu',
+      'Tam Ad',
+      'Vəzifə',
+      'Filial',
+      'Gross Maaş (AZN)',
+      'Gəlir Vergisi (AZN)',
+      'DSMF İşçi (AZN)',
+      'DSMF İşəgötürən (AZN)',
+      'İşsizlik İşçi (AZN)',
+      'İşsizlik İşəgötürən (AZN)',
+      'İTS İşçi (AZN)',
+      'İTS İşəgötürən (AZN)',
+      'Cəmi Tutulmalar (AZN)',
+      'Xalis Maaş (AZN)',
+      'Status',
+      'Qeyd',
+    ].join(',');
+
+    const rows = items.map((i) => {
+      const grossAzn = (Number(i.grossSalaryQapik) / 100).toFixed(2);
+      const taxAzn = (Number(i.incomeTaxQapik) / 100).toFixed(2);
+      const dsmfEmpAzn = (Number(i.dsmfEmployeeQapik) / 100).toFixed(2);
+      const dsmfOrgAzn = (Number(i.dsmfEmployerQapik) / 100).toFixed(2);
+      const unempEmpAzn = (Number(i.unemploymentEmployeeQapik) / 100).toFixed(2);
+      const unempOrgAzn = (Number(i.unemploymentEmployerQapik) / 100).toFixed(2);
+      const medEmpAzn = (Number(i.itsEmployeeQapik) / 100).toFixed(2);
+      const medOrgAzn = (Number(i.itsEmployerQapik) / 100).toFixed(2);
+      const deductionsAzn = (Number(i.totalDeductionsQapik) / 100).toFixed(2);
+      const netAzn = (Number(i.netSalaryQapik) / 100).toFixed(2);
+
+      return [
+        `"${currentPeriod?.name || 'Maaş Dövrü'}"`,
+        `"${i.employeeId}"`,
+        `"${i.employeeName}"`,
+        `"${i.jobTitle || 'Vəzifə'}"`,
+        `"${i.branchName || 'Baş Ofis'}"`,
+        grossAzn,
+        taxAzn,
+        dsmfEmpAzn,
+        dsmfOrgAzn,
+        unempEmpAzn,
+        unempOrgAzn,
+        medEmpAzn,
+        medOrgAzn,
+        deductionsAzn,
+        netAzn,
+        '"DRAFT (Təsdiqlənməyib)"',
+        '"AR VM və DSMF üzrə mühasibat yoxlaması üçün layihə sənədi"',
+      ].join(',');
+    });
+
+    const footer = [
+      '',
+      '"*** XƏBƏRDARLIQ: Bu sənəd layihə (DRAFT) xarakteri daşıyır. AR qanunvericiliyinə uyğun yekun rəsmiləşdirmə mühasib tərəfindən qaydalar təsdiqləndikdən sonra aparılmalıdır. ***"',
+    ].join(',');
+
+    const csv = [header, ...rows, '', footer].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `DRAFT_Muehasib_Hesabati_${currentPeriod?.code || 'run'}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: 'Mühasib Layihə Faylı İxrac Edildi',
+      description: 'DRAFT audit cədvəli CSV formatında yükləndi.',
+    });
+  };
+
   const isLocked = currentPeriod?.status === 'finalized' || currentPeriod?.status === 'paid';
 
   return (
@@ -263,6 +358,16 @@ export const PayrollPage: React.FC = () => {
           >
             <Building2 className="w-4 h-4" />
             Filial Xərc Bölgüsü
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExportDraftAccountantCsv}
+            className="flex items-center gap-1.5 border-bh-accent/40 text-bh-accent"
+          >
+            <Download className="w-4 h-4" />
+            Mühasib üçün DRAFT İxrac
           </Button>
 
           <Button
@@ -326,15 +431,28 @@ export const PayrollPage: React.FC = () => {
                 )}
 
                 {currentPeriod.status === 'approved' && (
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={handleFinalize}
-                    className="text-xs flex items-center gap-1 bg-amber-600 hover:bg-amber-700 text-white"
-                  >
-                    <Lock className="w-3.5 h-3.5" />
-                    Yekunlaşdır və Kilidlə
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      disabled={payrollGate !== null && !payrollGate.allowed}
+                      onClick={handleFinalize}
+                      className={`text-xs flex items-center gap-1 ${
+                        payrollGate !== null && !payrollGate.allowed
+                          ? 'opacity-50 cursor-not-allowed bg-muted text-muted-foreground'
+                          : 'bg-amber-600 hover:bg-amber-700 text-white'
+                      }`}
+                      title={payrollGate !== null && !payrollGate.allowed ? payrollGate.blockedReason : undefined}
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      Yekunlaşdır və Kilidlə
+                    </Button>
+                    {payrollGate !== null && !payrollGate.allowed && (
+                      <Badge variant="warning" className="text-[10px]">
+                        Mühasib təsdiqi tələb olunur (payroll_tax / social_insurance)
+                      </Badge>
+                    )}
+                  </div>
                 )}
               </>
             )}

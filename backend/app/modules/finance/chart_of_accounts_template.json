@@ -1,0 +1,180 @@
+{
+  "_comment": "QEYD: Bu fayl neytral beynəlxalq tədris şablonudur (Neutral Template). Bu hesablar planı Azərbaycan Respublikasının qüvvədə olan Vergi Məcəlləsinə və ya Milli Mühasibat Uçotu Standartlarına (MMUS) uyğunlaşdırılmamışdır. Tətbiq edilməzdən əvvəl yerli sertifikatlaşdırılmış baş mühasib tərəfindən yoxlanılmalı və rəsmi təsdiq edilməlidir.",
+  "metadata": {
+    "version": "1.0.0",
+    "standard": "Neutral Educational Template",
+    "requires_accountant_review": true,
+    "company_default_currency": "AZN"
+  },
+  "accounts": [
+    {
+      "code": "1000",
+      "name": "Pul Vəsaitləri və Ekvivalentləri (Cash & Cash Equivalents)",
+      "account_type": "asset",
+      "parent_code": null,
+      "description": "Əsas pul vəsaitləri ana hesabı"
+    },
+    {
+      "code": "1010",
+      "name": "Filial Kassa Qalığı (Branch Cash Drawer / Safe)",
+      "account_type": "asset",
+      "parent_code": "1000",
+      "description": "Filial kassalarında olan fiziki nağd pul"
+    },
+    {
+      "code": "1020",
+      "name": "Bank Hesablaşma Hesabları (Bank Current Accounts)",
+      "account_type": "asset",
+      "parent_code": "1000",
+      "description": "Kommersiya banklarındakı cari hesablar"
+    },
+    {
+      "code": "1030",
+      "name": "Yolda Olan Pul Vəsaitləri və Kart Klirinqi (Cash / Card In-Transit)",
+      "account_type": "asset",
+      "parent_code": "1000",
+      "description": "Bank terminalı klirinqi və inkassasiya vəsaitləri"
+    },
+    {
+      "code": "1200",
+      "name": "Alıcıların Borcları (Accounts Receivable - Trade Debtors)",
+      "account_type": "asset",
+      "parent_code": null,
+      "description": "Nisyə satış üzrə debitor borclar"
+    },
+    {
+      "code": "1209",
+      "name": "Şübhəli Borclar Üzrə Ehtiyat (Allowance for Doubtful Accounts)",
+      "account_type": "contra",
+      "parent_code": "1200",
+      "description": "Debitor borcların balans dəyərini azaldan tənzimləyici kontra-aktiv hesabı"
+    },
+    {
+      "code": "1300",
+      "name": "Əmtəə-Maddi Ehtiyatları (Merchandise Inventory)",
+      "account_type": "asset",
+      "parent_code": null,
+      "description": "Satış üçün anbarda saxlanılan malların maya dəyəri"
+    },
+    {
+      "code": "2000",
+      "name": "Təchizatçılara Kreditor Borclar (Accounts Payable - Trade Creditors)",
+      "account_type": "liability",
+      "parent_code": null,
+      "description": "Təchizatçılardan alınmış mallar üzrə borclar"
+    },
+    {
+      "code": "2010",
+      "name": "Fakturalaşdırılmamış Təchizat Borcu (Unbilled AP / Goods Received Not Invoiced)",
+      "account_type": "liability",
+      "parent_code": "2000",
+      "description": "Anbara qəbul edilmiş, lakin fakturası hələ təsdiqlənməmiş mallar"
+    },
+    {
+      "code": "2100",
+      "name": "Büdcəyə Vergi Borcları (Taxes Payable)",
+      "account_type": "liability",
+      "parent_code": null,
+      "description": "Satışdan yaranan ƏDV və digər vergi öhdəlikləri"
+    },
+    {
+      "code": "2200",
+      "name": "Əmək Haqqı Üzrə İşçi Heyətinə Borclar (Payroll Liabilities)",
+      "account_type": "liability",
+      "parent_code": null,
+      "description": "Hesablanmış, lakin hələ ödənilməmiş əmək haqları"
+    },
+    {
+      "code": "3000",
+      "name": "Nizamnamə Kapitalı (Owner's Equity / Paid-in Capital)",
+      "account_type": "equity",
+      "parent_code": null,
+      "description": "Təsisçilərin yatırdığı nizamnamə kapitalı"
+    },
+    {
+      "code": "3100",
+      "name": "Bölüşdürülməmiş Mənfəət (Retained Earnings)",
+      "account_type": "equity",
+      "parent_code": null,
+      "description": "Keçmiş dövrlərdən yığılmış xalis mənfəət/zərər"
+    },
+    {
+      "code": "4000",
+      "name": "Malların Satışından Əldə Olunan Gəlir (Merchandise Sales Revenue)",
+      "account_type": "revenue",
+      "parent_code": null,
+      "description": "Pərakəndə və korporativ satış gəlirləri"
+    },
+    {
+      "code": "4100",
+      "name": "Satış Endirimləri və Geri Qaytarmalar (Sales Returns & Discounts)",
+      "account_type": "contra",
+      "parent_code": "4000",
+      "description": "Gəliri birbaşa azaldan kontra-gəlir hesabı"
+    },
+    {
+      "code": "4200",
+      "name": "Digər Əməliyyat Gəlirləri (Other Operating Income)",
+      "account_type": "revenue",
+      "parent_code": null,
+      "description": "Qeyri-satış gəlirləri"
+    },
+    {
+      "code": "5000",
+      "name": "Satılmış Malların Maya Dəyəri (Cost of Goods Sold - COGS)",
+      "account_type": "expense",
+      "parent_code": null,
+      "description": "Satılan malların anbar maya dəyərinin silinməsi"
+    },
+    {
+      "code": "6000",
+      "name": "Əməliyyat Xərcləri - İcarə və Kommunal (Rent & Utilities)",
+      "account_type": "expense",
+      "parent_code": null,
+      "description": "Mağaza və ofis icarəsi və kommunal xərclər"
+    },
+    {
+      "code": "6100",
+      "name": "Əmək Haqqı Xərcləri (Salaries & Benefits)",
+      "account_type": "expense",
+      "parent_code": null,
+      "description": "İşçi heyətinin əmək haqqı və sosial sığorta xərcləri"
+    },
+    {
+      "code": "6200",
+      "name": "Marketinq və Reklam Xərcləri (Marketing & Ads)",
+      "account_type": "expense",
+      "parent_code": null,
+      "description": "Reklam, PR və təşviqat kampaniyaları"
+    },
+    {
+      "code": "6300",
+      "name": "Nəqliyyat və Logistika Xərcləri (Transport & Logistics)",
+      "account_type": "expense",
+      "parent_code": null,
+      "description": "Malların daşınması və çatdırılma xərcləri"
+    },
+    {
+      "code": "6400",
+      "name": "Təmir və Təsərrüfat Xərcləri (Maintenance & Repairs)",
+      "account_type": "expense",
+      "parent_code": null,
+      "description": "Kassa, avadanlıq və mağaza təmiri xərcləri"
+    },
+    {
+      "code": "6500",
+      "name": "Bank Komissiyaları və POS Ekifinq (Bank Fees & Merchant Processing)",
+      "account_type": "expense",
+      "parent_code": null,
+      "description": "Bank xidmətləri və kart ödənişi faizləri"
+    },
+    {
+      "code": "6900",
+      "name": "Kassa Artığı və Əskiyi (Cash Over / Short)",
+      "account_type": "expense",
+      "parent_code": null,
+      "description": "Kassa növbəsinin bağlanışında yaranan fərqlər"
+    }
+  ]
+}
+

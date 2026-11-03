@@ -1,0 +1,119 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quality-and-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: brand_house_erp_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7.4-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.4.20"
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        working-directory: backend
+        run: |
+          uv venv
+          uv pip install -e ".[dev]"
+
+      - name: Ruff Lint & Format Check
+        working-directory: backend
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Mypy Strict Type Check
+        working-directory: backend
+        run: |
+          uv run mypy app scripts tests
+
+      - name: Architectural Import Linter Contracts
+        working-directory: backend
+        run: |
+          uv run lint-imports
+
+      - name: Security Vulnerability Audit
+        working-directory: backend
+        run: |
+          uv run pip-audit
+
+      - name: Migration Up/Down and Schema Drift Check
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgrespassword@localhost:5432/brand_house_erp_test
+        run: |
+          # 1. Upgrade to head
+          uv run alembic upgrade head
+          # 2. Schema drift check: alembic check must report no pending diff
+          uv run alembic check
+          # 3. Test downgrade
+          uv run alembic downgrade -1
+          # 4. Re-upgrade to head
+          uv run alembic upgrade head
+
+      - name: Run Pytest Suite with Coverage
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgrespassword@localhost:5432/brand_house_erp_test
+          REDIS_URL: redis://localhost:6379/0
+          APP_ENV: testing
+        run: |
+          uv run pytest -v --cov=app --cov-report=xml --cov-report=term-missing
+
+      - name: Export OpenAPI Spec Artifact
+        working-directory: backend
+        run: |
+          python -c "import json; from app.main import app; open('openapi.json', 'w').write(json.dumps(app.openapi(), indent=2))"
+
+      - name: Upload OpenAPI Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-spec
+          path: backend/openapi.json
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker Image
+        working-directory: backend
+        run: |
+          docker build -t brand-house-erp-backend:ci .
+

@@ -1,0 +1,105 @@
+{
+  "title": "Uyğunluq Mərkəzi",
+  "disclaimer": "Bu sistem uyğunluğa dəstək verir, hüquqi məsləhət deyil; qaydalar mühasib/hüquqşünas tərəfindən təsdiqlənməlidir.",
+  "demoBadge": "DEMO REJİMİ",
+  "unverifiedGlobalBanner": "DİQQƏT: Sistemdə təsdiqlənməmiş hüquqi qayda paketləri mövcuddur ({{unverifiedCount}} ədəd). İstehsalat rejimində bu paketlərin təsdiqi tələb olunur.",
+  "productionGateBlocking": "İstehsalat bloklanması: Bu əməliyyat üçün tələb olunan hüquqi qayda paketi ({{domain}}) təsdiqlənməyib. Yalnız hüquqşünas və ya baş mühasib tərəfindən təsdiqləndikdən sonra aktivləşdirilə bilər.",
+  "twoPersonRuleError": "İki şəxs qaydası pozuldu: Qaydanı təklif və ya redaktə edən şəxs özü onu təsdiqləyə bilməz (verifier ≠ editor).",
+  "evidenceMinLengthError": "Sübut qeydləri ən azı 20 simvol olmalıdır.",
+  "domains": {
+    "vat": "ƏDV",
+    "fiscal": "Fiskal çek",
+    "payroll_tax": "Əmək haqqı vergiləri",
+    "social_insurance": "Sosial sığorta",
+    "work_time": "İş vaxtı",
+    "leave": "Məzuniyyət",
+    "consumer_rights": "İstehlakçı hüquqları",
+    "personal_data": "Şəxsi məlumatlar",
+    "retention": "Məlumatların saxlanması"
+  },
+  "statuses": {
+    "VERIFIED": "Təsdiqlənib",
+    "UNVERIFIED": "Təsdiqlənməyib",
+    "DISPUTED": "Mübahisəli",
+    "SUPERSEDED": "Əvəz olunub",
+    "MISSING": "Çatışmır"
+  },
+  "fiscal": {
+    "status": "Fiskal status",
+    "active": "Aktiv",
+    "unavailable": "Əlçatmaz",
+    "not_configured": "Konfiqurasiya olunmayıb",
+    "unknown": "Qeyri-müəyyən",
+    "pending": "Gözləmədə",
+    "reconcile": "Statusu yoxla",
+    "blockedRequired": "Fiskal rejim MÜTLƏQ (REQUIRED) təyin edildiyi üçün fiskal modul əlçatmaz olduqda satış tamamlana bilməz.",
+    "qrCode": "Fiskal QR kod",
+    "fiscalId": "Fiskal İD",
+    "deviceSerial": "Kassa seriya nömrəsi",
+    "validatorErrors": "Çatışmayan məcburi fiskal sahələr (25 tələbdən)"
+  },
+  "returns": {
+    "windowText": "14 gün (alış günü sayılmır) — qalan: {{days}} gün",
+    "expired": "Qaytarma müddəti bitib",
+    "nonReturnable": "Qaytarılmayan mal (NK Qərarı No. 114)",
+    "returnable": "Qaytarıla bilər",
+    "conditions": {
+      "unused": "Mal istifadə olunmayıb",
+      "labels": "İstehlak xassələri, plomblar, yarlıqlar saxlanılıb",
+      "receipt": "Kassa və ya əmtəə çeki mövcuddur"
+    },
+    "defectFlow": "Qüsurlu mal prosesi (Ekspertiza və təchizatçı iddiası)",
+    "refusalReason": "İmtina səbəbi (Hüquqi əsaslandırma)",
+    "policyFloorError": "Qanunvericiliklə müəyyən edilmiş qaytarma müddəti 14 gündən az ola bilməz (İstehlakçıların hüquqlarının müdafiəsi haqqında Qanun, Maddə 15)."
+  },
+  "turnover": {
+    "title": "İllik Dövriyyə Monitorinqi (ƏDV Öhdəliyi)",
+    "threshold": "Hədd: 200,000 AZN",
+    "cashlessCoefficient": "Nağdsız dövriyyəyə 0.5 güzəşt əmsalı tətbiq edilir",
+    "status": "Cari tənzimlənmiş dövriyyə: {{amount}} AZN ({{percent}}%)",
+    "draftNotice": "DRAFT İNDİKATOR: Yalnız məlumat xarakterlidir, rəsmi vergi hesabatı deyildir.",
+    "warning80": "DİQQƏT: İllik dövriyyə həddinin 80%-i keçildi. ƏDV qeydiyyatı ehtiyacını nəzərdən keçirin.",
+    "warning95": "TƏCİLİ XƏBƏRDARLIQ: İllik dövriyyə həddinin 95%-i keçildi. Məcburi ƏDV qeydiyyatı tələb oluna bilər.",
+    "exceeded": "HƏDD KEÇİLDİ: 200,000 AZN həddi aşıldı. Vergi Məcəlləsinin 155-ci maddəsinə əsasən ƏDV qeydiyyatı tələb olunur."
+  },
+  "privacy": {
+    "title": "Fərdi Məlumatlar və Məxfilik Mərkəzi",
+    "systemRegistration": "Fərdi məlumat sistemlərinin dövlət qeydiyyatı",
+    "systemStatus": {
+      "REGISTERED": "Dövlət qeydiyyatından keçib",
+      "PENDING": "Qeydiyyat gözlənilir",
+      "EXEMPT": "İstisna təşkil edir"
+    },
+    "processingRegister": "Məlumatların emalı reyestri",
+    "transferRegister": "Transsərhəd ötürülmə reyestri",
+    "dsarQueue": "Vətəndaş müraciətləri (DSAR)",
+    "retentionRules": "Saxlama müddəti qaydaları",
+    "legalHolds": "Hüquqi saxlama (Legal Hold)",
+    "inspectionPack": "Yoxlama paketi (Audit Bundle)",
+    "generateInspectionPack": "Yoxlama paketi yarat (SHA-256)",
+    "consentModalTitle": "Fərdi Məlumatların Emalına Razılıq",
+    "purposes": {
+      "marketing": "Marketinq və bildirişlər",
+      "loyalty": "Loyallıq proqramı və keşbek",
+      "profiling": "Fərdi təkliflər və seqmentasiya",
+      "cross_border": "Transsərhəd məlumat ötürülməsi",
+      "retention": "Məlumatların qanunvericilik müddətində saxlanması"
+    }
+  },
+  "obligations": {
+    "title": "Hüquqi və Vergi Öhdəlikləri Təqvimi",
+    "due": "Son tarix",
+    "cadence": "Dövriyyə",
+    "owner": "Məsul şəxs",
+    "markCompleted": "İcra olundu kimi qeyd et",
+    "attachEvidence": "Sübut / Hesabat faylını əlavə et"
+  },
+  "questions": {
+    "title": "Açıq Hüquqi Məsələlər və İrəli Sürülən Rəylər",
+    "question": "Hüquqi sual",
+    "assignee": "Təyin olunub",
+    "notes": "Həll qeydləri",
+    "status": "Vəziyyət"
+  }
+}
+

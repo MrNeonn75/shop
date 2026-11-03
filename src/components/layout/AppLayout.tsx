@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { GlobalComplianceBanner } from '../../features/compliance/components/GlobalComplianceBanner';
 import { InactivityTracker } from './InactivityTracker';
 import { SessionExpiredModal } from './SessionExpiredModal';
 import { PageSkeleton } from '../ui/PageSkeleton';
@@ -30,6 +31,7 @@ export const AppLayout: React.FC = () => {
 
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden">
+        <GlobalComplianceBanner />
         <Header />
 
         {/* Global Offline Network Alert */}

@@ -129,6 +129,8 @@ export const ALL_PERMISSIONS: PermissionDefinition[] = [
   { code: 'notifications.rules.manage', name: 'Xəbərdarlıq Qaydaları Tənzimləməsi', description: 'Kritik stok və kassa fərqi xəbərdarlıq qaydaları qurmaq', category: 'admin' },
   { code: 'settings.general.view', name: 'Ümumi Parametrlər', description: 'Sistem parametrlərini görmək', category: 'admin' },
   { code: 'settings.system.manage', name: 'Sistem Parametrlərinin İdarəetməsi', description: 'Bütün sistem konfiqurasiyalarının dəyişdirilməsi (HƏSSAS)', category: 'admin', isSensitive: true },
+  { code: 'compliance.rules.view', name: 'Hüquqi Qaydalara Baxış', description: 'Uyğunluq Mərkəzi və qanunvericilik reyestrinə baxış', category: 'admin' },
+  { code: 'compliance.rules.verify', name: 'Hüquqi Qaydaları Təsdiq Etmək', description: 'Hüquqi qayda paketlərini təsdiqləmək və aktivləşdirmək (HƏSSAS)', category: 'admin', isSensitive: true },
 ];
 
 /**
@@ -199,6 +201,8 @@ export const ROLE_DEFAULT_PERMISSIONS: Record<UserRole, PermissionString[]> = {
     'settings.general.view',
     'settings.system.manage',
     'approvals.inbox.view',
+    'compliance.rules.view',
+    'compliance.rules.verify',
   ],
 
   branch_manager: [

@@ -1,0 +1,119 @@
+[importlinter]
+root_package = app
+
+# 1. Modul daxili qatlaşdırma qaydası (Layers)
+[importlinter:contract:layer-contracts]
+name = Layered Architecture within Modules
+type = layers
+layers =
+    router
+    service
+    repository
+    models
+containers =
+    app.modules.ping
+    app.modules.users
+    app.modules.rbac
+    app.modules.sessions
+    app.modules.auth
+    app.modules.audit
+    app.modules.company
+    app.modules.branches
+    app.modules.warehouses
+    app.modules.cash_registers
+    app.modules.settings
+    app.modules.numbering
+    app.modules.integrations
+    app.modules.catalog
+    app.modules.inventory
+    app.modules.transfers
+    app.modules.suppliers
+    app.modules.approvals
+    app.modules.purchasing
+    app.modules.pos
+    app.modules.sales
+    app.modules.returns
+    app.modules.finance
+    app.modules.hr
+    app.modules.payroll
+    app.modules.marketing
+    app.modules.crm
+    app.modules.loyalty
+    app.modules.reporting
+    app.modules.analytics
+    app.modules.notifications
+    app.modules.compliance
+
+
+# 2. Shared qatının modullardan asılısızlığı
+[importlinter:contract:shared-independence]
+name = Shared layer must not depend on modules
+type = forbidden
+source_modules =
+    app.shared
+forbidden_modules =
+    app.modules
+
+# 3. Core infrastrukturunun biznes modullarından və shared-dən tam asılısızlığı
+[importlinter:contract:core-independence]
+name = Core layer must not depend on modules or shared
+type = forbidden
+source_modules =
+    app.core
+forbidden_modules =
+    app.modules
+    app.shared
+ignore_imports =
+    app.core.health -> app.shared.backup_model
+    app.core.health -> app.shared.integrations
+    app.core.health -> app.shared.outbox
+    app.core.health -> app.modules.compliance.service
+
+# 4. Modullar arası model və repozitorilərə birbaşa çıxışın qadağan edilməsi
+[importlinter:contract:no-cross-module-models-and-repos]
+name = No direct cross-module model or repository imports
+type = forbidden
+source_modules =
+    app.modules.auth.service
+    app.modules.auth.router
+    app.modules.audit.service
+    app.modules.audit.router
+    app.modules.rbac.service
+    app.modules.rbac.router
+    app.modules.sessions.service
+    app.modules.sessions.router
+    app.modules.users.service
+    app.modules.users.router
+    app.modules.ping.service
+    app.modules.ping.router
+    app.modules.catalog.service
+    app.modules.catalog.router
+forbidden_modules =
+    app.modules.auth.models
+    app.modules.auth.repository
+    app.modules.audit.repository
+    app.modules.ping.models
+    app.modules.ping.repository
+    app.modules.rbac.models
+    app.modules.rbac.repository
+    app.modules.sessions.models
+    app.modules.sessions.repository
+    app.modules.users.models
+    app.modules.users.repository
+    app.modules.catalog.models
+    app.modules.catalog.repository
+ignore_imports =
+    app.modules.auth.service -> app.modules.auth.models
+    app.modules.auth.service -> app.modules.auth.repository
+    app.modules.audit.service -> app.modules.audit.repository
+    app.modules.ping.service -> app.modules.ping.models
+    app.modules.ping.service -> app.modules.ping.repository
+    app.modules.rbac.service -> app.modules.rbac.models
+    app.modules.rbac.service -> app.modules.rbac.repository
+    app.modules.sessions.service -> app.modules.sessions.models
+    app.modules.sessions.service -> app.modules.sessions.repository
+    app.modules.users.service -> app.modules.users.models
+    app.modules.users.service -> app.modules.users.repository
+    app.modules.catalog.service -> app.modules.catalog.models
+    app.modules.catalog.service -> app.modules.catalog.repository
+

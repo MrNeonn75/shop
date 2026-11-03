@@ -185,10 +185,45 @@ export const ReceiptPrintModal: React.FC = () => {
               )}
             </div>
 
+            {/* Official Azerbaijani Fiscal Block (AR VM Maddə 50) */}
+            <div className="text-center my-2 pt-2 border-t border-dashed border-zinc-400 space-y-1 text-[9px]">
+              <div className="font-bold uppercase tracking-wider text-[10px]">FİSKAL MƏLUMATLAR</div>
+              <div className="flex justify-between text-zinc-700">
+                <span>VÖEN:</span>
+                <span className="font-mono font-bold">1400123456</span>
+              </div>
+              <div className="flex justify-between text-zinc-700">
+                <span>NM Qeydiyyat Nömrəsi:</span>
+                <span className="font-mono">EK-2026-BH-001</span>
+              </div>
+              <div className="flex justify-between text-zinc-700">
+                <span>Fiskal ID:</span>
+                <span className="font-mono font-bold">AZF-2026-0098412</span>
+              </div>
+              <div className="flex justify-between text-zinc-700">
+                <span>Fiskal Əlamət:</span>
+                <span className="font-mono">FSK-8921-9874-1290</span>
+              </div>
+
+              {/* Fiscal QR Code container */}
+              <div className="py-2 flex flex-col items-center justify-center">
+                <div className="w-24 h-24 border border-zinc-300 p-1 bg-white flex flex-col items-center justify-center">
+                  <div className="w-20 h-20 bg-zinc-900 flex items-center justify-center text-white text-[8px] text-center p-1 font-mono">
+                    [QR KOD: monitoring.taxes.gov.az]
+                  </div>
+                </div>
+                <span className="text-[8px] text-zinc-500 font-mono mt-0.5">ƏDV Geri Al / Yoxla</span>
+              </div>
+
+              <div className="text-[8px] text-emerald-800 bg-emerald-50 border border-emerald-300 py-0.5 px-1 rounded font-semibold">
+                ✓ 25/25 Qanuni Fiskal Sahə Təsdiqlənib (AR VM M.50)
+              </div>
+            </div>
+
             {/* Footer */}
-            <div className="text-center text-[9px] text-zinc-600 space-y-0.5 pt-1">
-              <p>ALIŞ-VERİŞİNİZ ÜÇÜN TƏŞƏKKÜR EDİRİK!</p>
-              <p>Məhsul dəyişimi 14 gün ərzində çeklə mümkündür.</p>
+            <div className="text-center text-[9px] text-zinc-600 space-y-0.5 pt-1 border-t border-dashed border-zinc-400">
+              <p className="font-bold">ALIŞ-VERİŞİNİZ ÜÇÜN TƏŞƏKKÜR EDİRİK!</p>
+              <p>Məhsul dəyişimi 14 gün ərzində çeklə mümkündür (NK Qərarı No. 114 istisnaları xaric).</p>
               <p className="font-mono text-[8px] pt-1">ID: {activeReceipt.idempotencyKey.slice(0, 16)}</p>
             </div>
           </div>

@@ -17,6 +17,7 @@ import {
   SystemRepository,
   SecurityAuditRepository,
   NotificationsRepository,
+  ComplianceRepository,
 } from './types';
 import { MockProductAdapter } from './mock/mockProductAdapter';
 import { MockBranchAdapter } from './mock/mockBranchAdapter';
@@ -34,10 +35,12 @@ import { MockBiAdapter } from './mock/mockBiAdapter';
 import { MockSystemAdapter } from './mock/mockSystemAdapter';
 import { MockSecurityAuditAdapter } from './mock/mockSecurityAuditAdapter';
 import { MockNotificationsAdapter } from './mock/mockNotificationsAdapter';
+import { MockComplianceAdapter } from './mock/mockComplianceAdapter';
 import { HttpProductAdapter } from './http/httpProductAdapter';
 import { HttpBranchAdapter } from './http/httpBranchAdapter';
 import { HttpDashboardAdapter } from './http/httpDashboardAdapter';
 import { HttpCatalogAdapter } from './http/httpCatalogAdapter';
+import { HttpComplianceAdapter } from './http/httpComplianceAdapter';
 import {
   BrendHouseLegacyProductAdapter,
   BrendHouseLegacyBranchAdapter,
@@ -65,6 +68,7 @@ function createAdapters(): {
   systemRepository: SystemRepository;
   securityAuditRepository: SecurityAuditRepository;
   notificationsRepository: NotificationsRepository;
+  complianceRepository: ComplianceRepository;
 } {
   const dataSource = env.VITE_DATA_SOURCE;
   const mockInventoryAdapter = new MockInventoryAdapter();
@@ -79,6 +83,7 @@ function createAdapters(): {
   const mockSystemAdapter = new MockSystemAdapter();
   const mockSecurityAuditAdapter = new MockSecurityAuditAdapter();
   const mockNotificationsAdapter = new MockNotificationsAdapter();
+  const mockComplianceAdapter = new MockComplianceAdapter();
 
   if (dataSource === 'http') {
     return {
@@ -99,6 +104,7 @@ function createAdapters(): {
       systemRepository: mockSystemAdapter,
       securityAuditRepository: mockSecurityAuditAdapter,
       notificationsRepository: mockNotificationsAdapter,
+      complianceRepository: new HttpComplianceAdapter(),
     };
   }
 
@@ -121,6 +127,7 @@ function createAdapters(): {
       systemRepository: mockSystemAdapter,
       securityAuditRepository: mockSecurityAuditAdapter,
       notificationsRepository: mockNotificationsAdapter,
+      complianceRepository: mockComplianceAdapter,
     };
   }
 
@@ -143,6 +150,7 @@ function createAdapters(): {
     systemRepository: mockSystemAdapter,
     securityAuditRepository: mockSecurityAuditAdapter,
     notificationsRepository: mockNotificationsAdapter,
+    complianceRepository: mockComplianceAdapter,
   };
 }
 
@@ -165,7 +173,4 @@ export const biRepository = adapters.biRepository;
 export const systemRepository = adapters.systemRepository;
 export const securityAuditRepository = adapters.securityAuditRepository;
 export const notificationsRepository = adapters.notificationsRepository;
-
-
-
-
+export const complianceRepository = adapters.complianceRepository;

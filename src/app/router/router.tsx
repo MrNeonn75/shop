@@ -68,6 +68,8 @@ const NotificationPreferencesPage = lazyPage(() => import('../../features/admin/
 const AlertRulesAdminPage = lazyPage(() => import('../../features/admin/pages/AlertRulesAdminPage'), 'AlertRulesAdminPage');
 const ApprovalsInboxPage = lazyPage(() => import('../../features/admin/pages/ApprovalsInboxPage'), 'ApprovalsInboxPage');
 const SystemSettingsPage = lazyPage(() => import('../../features/admin/pages/SystemSettingsPage'), 'SystemSettingsPage');
+const ComplianceCenterPage = lazyPage(() => import('../../features/compliance/pages/ComplianceCenterPage'), 'ComplianceCenterPage');
+const PrivacyCenterPage = lazyPage(() => import('../../features/compliance/pages/PrivacyCenterPage'), 'PrivacyCenterPage');
 
 // POS Module Page
 const PosTerminalPage = lazyPage(() => import('../../features/pos/pages/PosTerminalPage'), 'PosTerminalPage');
@@ -958,6 +960,22 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute requiredPermission="notifications.rules.manage">
             <AlertRulesAdminPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'compliance',
+        element: (
+          <ProtectedRoute requiredPermission="compliance.rules.view">
+            <ComplianceCenterPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'compliance/privacy',
+        element: (
+          <ProtectedRoute requiredPermission="compliance.rules.view">
+            <PrivacyCenterPage />
           </ProtectedRoute>
         ),
       },

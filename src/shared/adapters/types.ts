@@ -344,3 +344,64 @@ export type { SystemRepository } from './mock/mockSystemAdapter';
 export type { SecurityAuditRepository } from './mock/mockSecurityAuditAdapter';
 export type { NotificationsRepository } from './mock/mockNotificationsAdapter';
 
+export interface ComplianceRepository {
+  setProductionMode?(isProd: boolean): void;
+  checkFeatureGate(feature: string): Promise<{ allowed: boolean; warning?: string; blockingDomain?: string; requiredRole?: string }>;
+  getRulePacks(): Promise<import('../../features/compliance/types').RulePack[]>;
+  getBannerStatus(): Promise<import('../../features/compliance/types').ComplianceBannerResponse>;
+  getPersonalDataSystemRegistration(): Promise<import('../../features/compliance/types').PersonalDataSystemRegistration>;
+  recordConsent(record: any): Promise<any>;
+  verifyPack(packId: string, req: import('../../features/compliance/types').VerifyPackRequest): Promise<any>;
+  activatePack(packId: string, req: import('../../features/compliance/types').ActivatePackRequest): Promise<any>;
+  proposeChange(packId: string, req: any): Promise<any>;
+  completeObligation(id: string, notes?: string): Promise<any>;
+  getStatusSummary(): Promise<import('../../features/compliance/types').ComplianceStatusSummary>;
+  getBanner(): Promise<import('../../features/compliance/types').ComplianceBannerResponse>;
+  getRules(params?: { domain?: string; status?: string; ruleKey?: string }): Promise<import('../../features/compliance/types').LegalRule[]>;
+  getRuleById(id: string): Promise<import('../../features/compliance/types').LegalRule | null>;
+  getRuleHistory(id: string): Promise<import('../../features/compliance/types').LegalRule[]>;
+  getPacks(): Promise<import('../../features/compliance/types').RulePack[]>;
+  proposePackVersion(packId: string, req: import('../../features/compliance/types').ProposeChangeRequest): Promise<import('../../features/compliance/types').RulePackVersion>;
+  verifyPackVersion(versionId: string, req: import('../../features/compliance/types').VerifyPackRequest): Promise<import('../../features/compliance/types').RulePackVersion>;
+  rejectPackVersion(versionId: string, req: { verifierName: string; verifierRole: import('../../features/compliance/types').VerifierRole; evidenceNotes: string }): Promise<import('../../features/compliance/types').RulePackVersion>;
+  activatePackVersion(versionId: string, req: import('../../features/compliance/types').ActivatePackRequest): Promise<import('../../features/compliance/types').RulePackVersion>;
+  diffPackVersions(versionAId: string, versionBId: string): Promise<import('../../features/compliance/types').VersionDiff>;
+  exportRegister(format: 'csv' | 'pdf'): Promise<{ filename: string; body: string; disclaimer: string }>;
+
+  // Obligations
+  getObligations(status?: string): Promise<import('../../features/compliance/types').Obligation[]>;
+  createObligation(req: Partial<import('../../features/compliance/types').Obligation>): Promise<import('../../features/compliance/types').Obligation>;
+  updateObligation(id: string, req: Partial<import('../../features/compliance/types').Obligation>): Promise<import('../../features/compliance/types').Obligation>;
+  deleteObligation(id: string): Promise<boolean>;
+
+  // Open Legal Questions
+  getOpenLegalQuestions(): Promise<import('../../features/compliance/types').OpenLegalQuestion[]>;
+  updateLegalQuestion(id: number, req: { assignee?: string; notes?: string; status?: 'PENDING_LEGAL' | 'RESOLVED' }): Promise<import('../../features/compliance/types').OpenLegalQuestion>;
+
+  // Fiscal & Turnover
+  getFiscalStatus(): Promise<import('../../features/compliance/types').FiscalStatus>;
+  reconcileFiscal(): Promise<{ reconciled: boolean; matchedCount: number; driftFound: boolean; details: string }>;
+  getTurnoverMonitor(): Promise<import('../../features/compliance/types').TurnoverMonitorData>;
+
+  // Privacy & Retention
+  getDataProcessingRegister(): Promise<import('../../features/compliance/types').DataProcessingRegisterEntry[]>;
+  getTransferRegister(): Promise<import('../../features/compliance/types').TransferRegisterEntry[]>;
+  updateTransferRegister(id: string, req: Partial<import('../../features/compliance/types').TransferRegisterEntry>): Promise<import('../../features/compliance/types').TransferRegisterEntry>;
+  getPersonalDataRegistration(): Promise<import('../../features/compliance/types').PersonalDataSystemRegistration>;
+  getDsarRequests(): Promise<import('../../features/compliance/types').DsarRequest[]>;
+  updateDsarRequest(id: string, req: Partial<import('../../features/compliance/types').DsarRequest>): Promise<import('../../features/compliance/types').DsarRequest>;
+  getRetentionRules(): Promise<import('../../features/compliance/types').RetentionRuleItem[]>;
+  getLegalHolds(): Promise<import('../../features/compliance/types').LegalHoldItem[]>;
+  createLegalHold(req: { entityType: string; entityId: string; reason: string; heldByName: string }): Promise<import('../../features/compliance/types').LegalHoldItem>;
+  releaseLegalHold(id: string, releasedByName: string): Promise<import('../../features/compliance/types').LegalHoldItem>;
+
+  // Consents & Inspection
+  getConsentRecords(subjectId?: string): Promise<import('../../features/compliance/types').ConsentRecord[]>;
+  saveConsentRecord(record: Partial<import('../../features/compliance/types').ConsentRecord>): Promise<import('../../features/compliance/types').ConsentRecord>;
+  generateInspectionPack(periodFrom: string, periodTo: string): Promise<import('../../features/compliance/types').InspectionPackResponse>;
+
+  // Production Calendar
+  getProductionCalendar(year: number): Promise<import('../../features/compliance/types').ProductionCalendarYear>;
+  importProductionCalendar(data: Partial<import('../../features/compliance/types').ProductionCalendarYear>): Promise<import('../../features/compliance/types').ProductionCalendarYear>;
+}
+
